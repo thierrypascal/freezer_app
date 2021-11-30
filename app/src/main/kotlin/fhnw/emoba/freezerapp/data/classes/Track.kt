@@ -4,38 +4,37 @@ import org.json.JSONObject
 import java.net.URL
 import java.util.*
 
-class Track(
+data class Track(
     val id: Int,
-//    val readable: Boolean,
     val title: String,
-//    val title_short: String
-//    val unseen: Boolean,
-//    val link: URL,
+    val title_short: String,
+    val link: URL,
+//    val share: URL,
+    val duration: Int,
 //    val track_position: Int,
-//    val disk_number: Int,
-//    val rank: Int,
-//    val release_date: Date,
-//    val explicit_lyrics: Boolean,
-//    val preview: URL,
-//    val contributors: String,
+//    val release_date: String,
+    val explicit_lyrics: Boolean,
+    val preview: URL,
 //    val artist: Artist,
 //    val album: Album,
 
-) {  //diesen Konstruktor gibt es hauptsaechlich fuer TestZwecke, z.B. im Preview
-
+    ) {
     constructor(jsonObject: JSONObject) : this(
-        jsonObject.getInt("id"),
-//        jsonObject.getBoolean("readable"),
-        jsonObject.getString("title"),
-//        jsonObject.getString("title_short"),
-//        jsonObject.getBoolean("unseen"),
-//        jsonObject.getString("link"),//TODO: to URL
-//        jsonObject.getInt("track_position"),
-//        jsonObject.getInt("disk_number"),
-//        jsonObject.getInt("rank"),
+        id =            jsonObject.getInt("id"),
+        title =         jsonObject.getString("title"),
+        title_short =   jsonObject.getString("title_short"),
+        link =          URL(jsonObject.getString("link")),
+//        share =         URL(jsonObject.getString("share")),
+        duration =      jsonObject.getInt("duration"),
+//        track_position = jsonObject.getInt("track_position"),
+//        release_date =  jsonObject.getString("release_date"), //TODO: to DateTime
+        explicit_lyrics = jsonObject.getBoolean("explicit_lyrics"),
+        preview =       URL(jsonObject.getString("preview")),
+//        artist =        jsonObject.getJSONObject("artist"), //TODO: to Artist
+//        album =         jsonObject.getJSONObject("album"), //TODO: to Album
     )
 
     override fun toString(): String {
-        return "Track(id='$id', title='$title')"
+        return "Track(id='$id', title='$title', link='$link')"
     }
 }
