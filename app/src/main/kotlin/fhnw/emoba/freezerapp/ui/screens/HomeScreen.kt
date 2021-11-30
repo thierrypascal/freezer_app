@@ -84,7 +84,7 @@ private fun Body(model: FreezerModel) {
                 )
                 //TODO: add Deezer Logo with golden line above?/below?, tap on Logo to get "Impressum"/README as Scrollable Text
                 Image(
-                    painter = painterResource(R.drawable.deezerlogo),
+                    painter = painterResource(R.drawable.deezerlogo_white),
                     contentDescription = "Deezer Logo",
                     contentScale = ContentScale.Fit,
                     modifier = Modifier
