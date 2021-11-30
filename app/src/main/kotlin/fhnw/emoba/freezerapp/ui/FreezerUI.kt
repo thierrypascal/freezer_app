@@ -1,33 +1,28 @@
 package fhnw.emoba.freezerapp.ui
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
+import androidx.compose.animation.Crossfade
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.unit.sp
 import fhnw.emoba.freezerapp.model.FreezerModel
+import fhnw.emoba.freezerapp.model.Screen
+import fhnw.emoba.freezerapp.ui.screens.HomeScreen
+import fhnw.emoba.freezerapp.ui.theme.FreezerAppTheme
 
 
 @Composable
-fun FreezerUI(model : FreezerModel){
-    with(model){
-        Box(contentAlignment = Alignment.Center,
-            modifier         = Modifier.fillMaxSize()
-        ){
-            OutlinedTextField(
-                value = searchStringTrack,
-                onValueChange = {searchStringTrack  = it},
-                placeholder = { Text("Suche Track")},
-                singleLine = true,
-                keyboardActions = KeyboardActions(onDone = {
-                    getTracksAsync()
-                })
-            )
+fun FreezerUI(model: FreezerModel) {
+    with(model) {
+        FreezerAppTheme {
+            Crossfade(targetState = currentScreen) { screen ->
+                when (screen) {
+                    Screen.HOME -> {
+                        HomeScreen(model = model)
+                    }
+                    Screen.FAVORITETRACKS -> TODO()
+                    Screen.LASTPLAYED -> TODO()
+                    Screen.PLAYER -> TODO()
+                    Screen.SEARCH -> TODO()
+                }
+            }
         }
     }
 }
