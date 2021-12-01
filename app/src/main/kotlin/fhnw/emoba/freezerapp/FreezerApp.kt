@@ -14,6 +14,10 @@ object FreezerApp : EmobaApp {
     override fun initialize(activity: ComponentActivity) {
         val service = FreezerService()
         model = FreezerModel(service)
+
+        //TODO: remove; Only for testing
+        model.searchString = "i need a dollar"
+        model.getSearchAsync()
     }
 
     @Composable

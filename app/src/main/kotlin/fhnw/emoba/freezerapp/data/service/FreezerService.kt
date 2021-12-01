@@ -1,9 +1,6 @@
 package fhnw.emoba.freezerapp.data.service
 
-import fhnw.emoba.freezerapp.data.classes.Album
-import fhnw.emoba.freezerapp.data.classes.Artist
-import fhnw.emoba.freezerapp.data.classes.Radio
-import fhnw.emoba.freezerapp.data.classes.Track
+import fhnw.emoba.freezerapp.data.classes.*
 import fhnw.emoba.freezerapp.data.content
 import org.json.JSONObject
 import java.lang.Exception
@@ -13,58 +10,65 @@ class FreezerService {
     private val baseURL = "https://api.deezer.com/"
     private val appendRadioUrl = "radio"
     private val appendSearchUrl = "search?q="
-    private val searchForTrackUrl = "track:"
-    private val searchForAlbumUrl = "album:"
-    private val searchForArtistUrl = "artist:"
+    private val appendTrackUrl = "track/"
+    private val appendAlbumUrl = "album/"
+    private val appendArtistUrl = "artist/"
 
-    fun requestTrack(searchFilter: String): List<Track>{
-        val url = "$baseURL$appendSearchUrl$searchForTrackUrl\"$searchFilter\""
+    fun requestSearch(searchFilter: String): List<Track>{
+        val url = "$baseURL$appendSearchUrl$searchFilter"
         try {
             val data = JSONObject(content(url))
             val trackData = data.getJSONArray("data")
             val list: MutableList<Track> = mutableListOf()
             for (i in 0 until trackData.length()) {
                 list.add(Track(trackData.getJSONObject(i)))
+//                println(i)
+//                println(list[i].id)
+//                println(list[i].artist.id)
+//                println(list[i].album.id)
+//                println("------------")
             }
             return list
         }catch (e: Exception){
             //TODO: handle Exception correctly
-            println("Exception: ${e.message}")
+            println("$url: $e")
             return emptyList()
         }
     }
 
-    fun requestArtist(searchFilter: String): List<Artist>{
-        val url = "$baseURL$appendSearchUrl$searchForArtistUrl\"$searchFilter\""
+    fun requestTrack(searchFilter: Int): Track{
+        val url = "$baseURL$appendTrackUrl$searchFilter"
         try {
             val data = JSONObject(content(url))
-            val trackData = data.getJSONArray("data")
-            val list: MutableList<Artist> = mutableListOf()
-            for (i in 0 until trackData.length()) {
-                list.add(Artist(trackData.getJSONObject(i)))
-            }
-            return list
-        }catch (e: Exception){
+            return Track(data)
+        } catch (e: Exception) {
             //TODO: handle Exception correctly
-            println("Exception: ${e.message}")
-            return emptyList()
+            println("$url: $e")
+            return Track()
         }
     }
 
-    fun requestAlbum(searchFilter: String): List<Album>{
-        val url = "$baseURL$appendSearchUrl$searchForAlbumUrl\"$searchFilter\""
+    fun requestArtist(searchFilter: Int): Artist{
+        val url = "$baseURL$appendArtistUrl$searchFilter"
         try {
             val data = JSONObject(content(url))
-            val trackData = data.getJSONArray("data")
-            val list: MutableList<Album> = mutableListOf()
-            for (i in 0 until trackData.length()) {
-                list.add(Album(trackData.getJSONObject(i)))
-            }
-            return list
-        }catch (e: Exception){
+            return Artist(data)
+        } catch (e: Exception) {
             //TODO: handle Exception correctly
-            println("Exception: ${e.message}")
-            return emptyList()
+            println("$url: $e")
+            return Artist()
+        }
+    }
+
+    fun requestAlbum(searchFilter: Int): Album{
+        val url = "$baseURL$appendAlbumUrl$searchFilter"
+        try {
+            val data = JSONObject(content(url))
+            return Album(data)
+        } catch (e: Exception) {
+            //TODO: handle Exception correctly
+            println("$url: $e")
+            return Album()
         }
     }
 
@@ -80,9 +84,8 @@ class FreezerService {
             return list
         }catch (e: Exception){
             //TODO: handle Exception correctly
-            println("Exception: ${e.message}")
+            println("$url: $e")
             return emptyList()
         }
     }
-
 }

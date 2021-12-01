@@ -3,10 +3,7 @@ package fhnw.emoba.freezerapp.model
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import fhnw.emoba.freezerapp.data.classes.Album
-import fhnw.emoba.freezerapp.data.classes.Artist
-import fhnw.emoba.freezerapp.data.classes.Radio
-import fhnw.emoba.freezerapp.data.classes.Track
+import fhnw.emoba.freezerapp.data.classes.*
 import fhnw.emoba.freezerapp.data.service.FreezerService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -20,49 +17,68 @@ class FreezerModel(val service: FreezerService) {
 
     val title = "Freezer"
     val subtitle = "exclusive version"
-    var searchStringTrack by mutableStateOf("")
-    var searchStringArtist by mutableStateOf("")
-    var searchStringAlbum by mutableStateOf("")
+    var searchString by mutableStateOf("")
 
-    //List of last played tracks
     var lastPlayed: List<Track> by mutableStateOf(emptyList())
-    //List of favorite tracks
     var favoriteTrack: List<Track> by mutableStateOf(emptyList())
-    //Lazy List of all? tracks
+    var searchResult: List<Track> by mutableStateOf(emptyList())
     var tracksFound: List<Track> by mutableStateOf(emptyList())
-    //Lazy List of all? artists
     var artistsFound: List<Artist> by mutableStateOf(emptyList())
-    //Lazy List of all? albums
     var albumsFound: List<Album> by mutableStateOf(emptyList())
-    //Lazy List of all? radios
     var radiosFound: List<Radio> by mutableStateOf(emptyList())
+
+    var clickedTrack: Track by mutableStateOf(Track())
+    var clickedArtist: Artist by mutableStateOf(Artist())
+    var clickedAlbum: Album by mutableStateOf(Album())
 
     var isLoading by mutableStateOf(false)
 
-    //TODO: load all lists
-    fun getTracksAsync(){
+
+    //load all lists
+    fun getSearchAsync(){
         isLoading = true
+        searchResult = emptyList()
         tracksFound = emptyList()
-        modelScope.launch {
-            tracksFound = service.requestTrack(searchStringTrack)
-            isLoading = false
-        }
-    }
-
-    fun getArtistsAsync(){
-        isLoading = true
         artistsFound = emptyList()
-        modelScope.launch {
-            artistsFound = service.requestArtist(searchStringArtist)
-            isLoading = false
-        }
-    }
-
-    fun getAlbumsAsync(){
-        isLoading = true
         albumsFound = emptyList()
         modelScope.launch {
-            albumsFound = service.requestAlbum(searchStringAlbum)
+            searchResult = service.requestSearch(searchString)
+
+            if (searchResult.isNotEmpty()){
+                tracksFound =   searchResult
+                artistsFound =  searchResult.map {it.artist}
+                albumsFound =   searchResult.map {it.album}
+            }
+            isLoading = false
+        }
+    }
+
+    fun getClickedTrackAsync(searchFilter: Int){
+        //TODO: search radio?
+        isLoading = true
+        clickedTrack = Track()
+        modelScope.launch {
+            clickedTrack = service.requestTrack(searchFilter)
+            isLoading = false
+        }
+    }
+
+    fun getClickedArtistAsync(searchFilter: Int){
+        //TODO: search radio?
+        isLoading = true
+        clickedArtist = Artist()
+        modelScope.launch {
+            clickedArtist = service.requestArtist(searchFilter)
+            isLoading = false
+        }
+    }
+
+    fun getClickedAlbumAsync(searchFilter: Int){
+        //TODO: search radio?
+        isLoading = true
+        clickedAlbum = Album()
+        modelScope.launch {
+            clickedAlbum = service.requestAlbum(searchFilter)
             isLoading = false
         }
     }
