@@ -15,7 +15,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -23,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import fhnw.emoba.freezerapp.model.FreezerModel
 import fhnw.emoba.R
 import fhnw.emoba.freezerapp.data.classes.Track
+import fhnw.emoba.freezerapp.model.Screen
 
 @Composable
 fun HomeScreen(model: FreezerModel) {
@@ -40,15 +40,14 @@ fun HomeScreen(model: FreezerModel) {
 
 @Composable
 private fun TopBar(model: FreezerModel) {
-    val gold = MaterialTheme.colors.primary
     with(model) {
-        TopAppBar(
-            title = { Text(text = "" /*TODO: add golden circle*/) },
-            navigationIcon = { BackIcon() },
-            actions = { SearchIcon() },
-            backgroundColor = Color.Transparent,
-            contentColor = MaterialTheme.colors.secondary,
-        )
+            TopAppBar(
+                title = { Text(text = "" /*TODO: add golden circle*/) },
+                actions = { SearchIcon(model) },
+                backgroundColor = MaterialTheme.colors.background,
+                contentColor = MaterialTheme.colors.secondary,
+                elevation = 0.dp,
+            )
     }
 }
 
@@ -57,55 +56,62 @@ private fun Body(model: FreezerModel) {
     with(model) {
         Column(
             content = {
-                BasicRow(
-                    content = {
-                        Text("Zuletzt gespielt", fontWeight = FontWeight.Bold)
-                        IconButton(onClick = { /*TODO: open LastPlayedScreen*/ }) {
-                            Icon(Icons.Filled.ArrowForwardIos, "Zuletzt gespielt")
-                        }
-                    },
-                )
-                when {
-                    lastPlayed.isEmpty() -> Text("Noch keine Tracks gespielt")
-                    else -> HorizontalTrackList(model, lastPlayed)
-                }
-                BasicRow(
-                    content = {
-                        Text("Merkliste", fontWeight = FontWeight.Bold)
-                        IconButton(onClick = { /*TODO: open favoriteTracksScreen*/ }) {
-                            Icon(Icons.Filled.ArrowForwardIos, "Merkliste")
-                        }
-                    },
-                )
-                when {
-                    favoriteTracks.isEmpty() -> Text("Noch keine gemerkten Tracks")
-                    else -> HorizontalTrackList(model, favoriteTracks)
-                }
-                BasicRow(
-                    content = {
-                        Text("Listensuche", fontWeight = FontWeight.Bold)
-                        IconButton(onClick = { /*TODO: open SearchScreen*/ }) {
-                            Icon(Icons.Filled.ArrowForwardIos, "Listensuche")
-                        }
-                    },
-                )
-                //TODO: add Spacer
+                Column(content = {
+                    BasicRow(
+                        content = {
+                            Text("Zuletzt gespielt", fontWeight = FontWeight.Bold)
+                            IconButton(onClick = { /*TODO: open LastPlayedScreen*/ }) {
+                                Icon(Icons.Filled.ArrowForwardIos, "Zuletzt gespielt")
+                            }
+                        },
+                    )
+                    when {
+                        lastPlayed.isEmpty() -> Text("Noch keine Tracks gespielt")
+                        else -> HorizontalTrackList(model, lastPlayed)
+                    }
+                    BasicRow(
+                        content = {
+                            Text("Merkliste", fontWeight = FontWeight.Bold)
+                            IconButton(onClick = { /*TODO: open favoriteTracksScreen*/ }) {
+                                Icon(Icons.Filled.ArrowForwardIos, "Merkliste")
+                            }
+                        },
+                    )
+                    when {
+                        favoriteTracks.isEmpty() -> Text("Noch keine gemerkten Tracks")
+                        else -> HorizontalTrackList(model, favoriteTracks)
+                    }
+                    BasicRow(
+                        content = {
+                            Text("Listensuche", fontWeight = FontWeight.Bold)
+                            IconButton(onClick = { currentScreen = Screen.SEARCH }) {
+                                Icon(Icons.Filled.ArrowForwardIos, "Listensuche")
+                            }
+                        },
+                    )
+                })
                 //TODO: tap on Logo to get "Impressum"/README as Scrollable Text
-                Image(
-                    painter = painterResource(R.drawable.deezerlogo_white),
-                    contentDescription = "Deezer Logo",
-                    contentScale = ContentScale.Fit,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clip(RoundedCornerShape(20.dp))
-                )
-                Divider(
-                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
-                    color = MaterialTheme.colors.primary,
-                    thickness = 6.dp
-                )
+                Column(content = {
+                    Image(
+                        painter = painterResource(R.drawable.deezerlogo_white),
+                        contentDescription = "Deezer Logo",
+                        contentScale = ContentScale.Fit,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clip(RoundedCornerShape(20.dp))
+                    )
+                    Divider(
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp),
+                        color = MaterialTheme.colors.primary,
+                        thickness = 6.dp
+                    )
+                    Spacer(Modifier.height(100.dp))
+                })
             },
-            modifier = Modifier.padding(8.0.dp)
+            modifier = Modifier
+                .padding(8.0.dp)
+                .fillMaxSize(),
+            verticalArrangement = Arrangement.SpaceBetween
         )
     }
 }
@@ -120,8 +126,9 @@ private fun BottomBar(model: FreezerModel) {
                 }
                 //TODO: add miniplayer of currentlyPlaying
             },
-            backgroundColor = Color.Transparent,
+            backgroundColor = MaterialTheme.colors.background,
             contentColor = MaterialTheme.colors.secondary,
+            elevation = 0.dp,
         )
     }
 }
@@ -156,7 +163,7 @@ private fun TrackPanel(model: FreezerModel, track: Track) {
                     .clip(CircleShape)
             )
             SingleLineTextBold(track.artist.name)
-            SingleLineText(track.title)
+            SingleLineTextLight(track.title)
         },
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier

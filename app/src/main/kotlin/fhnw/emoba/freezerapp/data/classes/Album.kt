@@ -19,7 +19,7 @@ data class Album(
 ) {
     constructor(jsonObject: JSONObject) : this(
         id =            jsonObject.getInt("id"),
-        title =         jsonObject.getString("title"),
+        title =         jsonObject.getString("title").trim(),
         cover =         jsonObject.getString("cover"), //TODO: to Picture/Bitmap?
 
         link =          try {URL(jsonObject.getString("link"))}    catch (e: Exception) {URL("https://google.com/doesntexist")},

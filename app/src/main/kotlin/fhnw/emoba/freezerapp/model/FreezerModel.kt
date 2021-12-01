@@ -1,38 +1,28 @@
 package fhnw.emoba.freezerapp.model
 
-import android.content.Context
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
+import android.content.res.Resources
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.asImageBitmap
-import fhnw.emoba.R
 import fhnw.emoba.freezerapp.data.classes.*
 import fhnw.emoba.freezerapp.data.service.FreezerService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
-import java.net.URL
-import java.util.*
-import javax.net.ssl.HttpsURLConnection
-
-import android.graphics.drawable.BitmapDrawable
-
-
-
 
 class FreezerModel(val service: FreezerService) {
     private val modelScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     var currentScreen by mutableStateOf(Screen.HOME)
+    var currentTab by mutableStateOf(Tabs.TRACK)
 
     val title = "Freezer"
     val subtitle = "exclusive version"
     var searchString by mutableStateOf("")
 
+    //TODO: add playlist (current playing + to be played)
     var lastPlayed: List<Track> by mutableStateOf(emptyList())
     var favoriteTracks: List<Track> by mutableStateOf(emptyList())
     var searchResult: List<Track> by mutableStateOf(emptyList())
@@ -61,15 +51,18 @@ class FreezerModel(val service: FreezerService) {
 
             if (searchResult.isNotEmpty()) {
                 tracksFound = searchResult
-                artistsFound = searchResult.map { it.artist }
-                albumsFound = searchResult.map { it.album }
+                artistsFound = searchResult.map { it.artist }.distinctBy { artist -> artist.id }
+                albumsFound = searchResult.map { it.album }.distinctBy { album -> album.id }
+
+                tracksFound = tracksFound.sortedBy { it.title }
+                artistsFound = artistsFound.sortedBy { it.name }
+                albumsFound = albumsFound.sortedBy { it.title }
             }
             isLoading = false
         }
     }
 
     fun getClickedTrackAsync(searchFilter: Int) {
-        //TODO: search radio?
         isLoading = true
         clickedTrack = Track()
         modelScope.launch {
@@ -79,7 +72,6 @@ class FreezerModel(val service: FreezerService) {
     }
 
     fun getClickedArtistAsync(searchFilter: Int) {
-        //TODO: search radio?
         isLoading = true
         clickedArtist = Artist()
         modelScope.launch {
@@ -89,7 +81,6 @@ class FreezerModel(val service: FreezerService) {
     }
 
     fun getClickedAlbumAsync(searchFilter: Int) {
-        //TODO: search radio?
         isLoading = true
         clickedAlbum = Album()
         modelScope.launch {
@@ -104,6 +95,7 @@ class FreezerModel(val service: FreezerService) {
         radiosFound = emptyList()
         modelScope.launch {
             radiosFound = service.requestRadio()
+            radiosFound = radiosFound.sortedBy { radio -> radio.title }
             isLoading = false
         }
     }
@@ -117,5 +109,9 @@ class FreezerModel(val service: FreezerService) {
 //            isLoading = false
 //        }
         return null
+    }
+
+    fun getScreenWidth(): Int {
+        return Resources.getSystem().displayMetrics.densityDpi
     }
 }

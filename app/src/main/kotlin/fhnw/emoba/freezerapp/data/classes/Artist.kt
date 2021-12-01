@@ -12,7 +12,7 @@ data class Artist (
 ) {
         constructor(jsonObject: JSONObject) : this(
         id =            jsonObject.getInt("id"),
-        name =          jsonObject.getString("name"),
+        name =          jsonObject.getString("name").trim(),
         link =          URL(jsonObject.getString("link")),
         picture =       URL(jsonObject.getString("picture")), //TODO: to Picture/Bitmap?
 //        tracklist =     loadTracklistByUrl(URL(jsonObject.getString("tracklist"))) //TODO: load tracklist by url

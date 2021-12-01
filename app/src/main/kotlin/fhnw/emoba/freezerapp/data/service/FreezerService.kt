@@ -13,7 +13,7 @@ import javax.net.ssl.HttpsURLConnection
 class FreezerService {
     //TODO: load classes with data from deezer api
     private val baseURL = "https://api.deezer.com/"
-    private val appendRadioUrl = "radio"
+    private val appendRadioUrl = "radio/top"
     private val appendSearchUrl = "search?q="
     private val appendTrackUrl = "track/"
     private val appendAlbumUrl = "album/"

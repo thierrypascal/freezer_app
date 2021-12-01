@@ -19,18 +19,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import fhnw.emoba.freezerapp.model.FreezerModel
+import fhnw.emoba.freezerapp.model.Screen
 import java.time.format.TextStyle
 
 @Composable
-fun SearchIcon(){
-    IconButton(onClick = { /*TODO route to SearchPage*/ }) {
+fun SearchIcon(model: FreezerModel){
+    IconButton(onClick = { model.currentScreen = Screen.SEARCH }) {
         Icon(Icons.Filled.Search, "Suchen")
     }
 }
 
 @Composable
-fun BackIcon(){
-    IconButton(onClick = { /*TODO route to last screen*/ }) {
+fun BackIcon(model: FreezerModel){
+    IconButton(onClick = { model.currentScreen = Screen.HOME }) {
         Icon(Icons.Filled.ArrowBackIos, "Zurück")
     }
 }
@@ -52,6 +54,18 @@ fun SingleLineTextBold(text: String){
         textAlign = TextAlign.Center,
         maxLines = 1,
         fontWeight = FontWeight.Bold,
+    )
+}
+
+@Composable
+fun SingleLineTextLight(text: String){
+    Text(
+        text = text,
+        overflow = TextOverflow.Clip,
+        softWrap = true,
+        textAlign = TextAlign.Center,
+        maxLines = 1,
+        fontWeight = FontWeight.Light,
     )
 }
 

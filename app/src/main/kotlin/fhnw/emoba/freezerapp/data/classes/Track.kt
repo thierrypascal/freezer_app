@@ -22,8 +22,8 @@ data class Track(
 ) {
     constructor(jsonObject: JSONObject) : this(
         id =                        jsonObject.getInt("id"),
-        title =                     jsonObject.getString("title"),
-        title_short =               jsonObject.getString("title_short"),
+        title =                     jsonObject.getString("title").trim(),
+        title_short =               jsonObject.getString("title_short").trim(),
         link =              URL(    jsonObject.getString("link")),
         duration =                  jsonObject.getInt("duration"),
         explicit_lyrics =           jsonObject.getBoolean("explicit_lyrics"),
