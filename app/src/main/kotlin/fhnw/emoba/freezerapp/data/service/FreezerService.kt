@@ -1,9 +1,14 @@
 package fhnw.emoba.freezerapp.data.service
 
+import android.graphics.BitmapFactory
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import fhnw.emoba.freezerapp.data.classes.*
 import fhnw.emoba.freezerapp.data.content
 import org.json.JSONObject
 import java.lang.Exception
+import java.net.URL
+import javax.net.ssl.HttpsURLConnection
 
 class FreezerService {
     //TODO: load classes with data from deezer api
@@ -86,6 +91,25 @@ class FreezerService {
             //TODO: handle Exception correctly
             println("$url: $e")
             return emptyList()
+        }
+    }
+
+    fun requestCover(track: Track, size: String): ImageBitmap? {
+        try {
+            val url = URL("${track.album.cover}?size=${size}")
+            val conn = url.openConnection() as HttpsURLConnection
+            conn.connect()
+
+            val inputStream = conn.inputStream
+            val allBytes = inputStream.readBytes()
+            inputStream.close()
+
+            val bitmap = BitmapFactory.decodeByteArray(allBytes, 0, allBytes.size)
+
+            return bitmap.asImageBitmap()
+        } catch (e: Exception) {     //todo: bessere Loesung finden. So wird der Fehler nur kaschiert
+            println(e)
+            return null
         }
     }
 }

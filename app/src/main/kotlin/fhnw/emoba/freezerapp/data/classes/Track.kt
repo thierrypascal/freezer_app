@@ -1,6 +1,7 @@
 package fhnw.emoba.freezerapp.data.classes
 
 import org.json.JSONObject
+import java.lang.Exception
 import java.net.URL
 import java.util.*
 
@@ -15,9 +16,9 @@ data class Track(
     val artist: Artist,
     val album: Album,
 
-//    val share: URL,
-//    val track_position: Int,
-//    val release_date: String,
+    val share: URL,
+    val track_position: Int,
+    val release_date: String,
 ) {
     constructor(jsonObject: JSONObject) : this(
         id =                        jsonObject.getInt("id"),
@@ -30,9 +31,9 @@ data class Track(
         artist =                    Artist(jsonObject.getJSONObject("artist")),
         album =                     Album(jsonObject.getJSONObject("album")),
 
-//        share =             URL(    jsonObject.getString("share")),
-//        track_position =            jsonObject.getInt("track_position"),
-//        release_date =              jsonObject.getString("release_date"), //TODO: to DateTime
+        share =             try {URL(jsonObject.getString("share"))}    catch (e: Exception) {URL("https://google.com/doesntexist")},
+        track_position =    try {jsonObject.getInt("track_position")}   catch (e: Exception) {0},
+        release_date =      try {jsonObject.getString("release_date")}  catch (e: Exception) {"NaN"}, //TODO: to DateTime
     )
 
     constructor() : this(
@@ -46,9 +47,9 @@ data class Track(
         artist =          Artist(),
         album =           Album(),
 
-//        share =             URL("https://google.com/doesntexist"),
-//        track_position =    0,
-//        release_date =      "NaN", //TODO: to DateTime
+        share =             URL("https://google.com/doesntexist"),
+        track_position =    0,
+        release_date =      "NaN", //TODO: to DateTime
     )
 
     override fun toString(): String {

@@ -2,13 +2,11 @@ package fhnw.emoba.freezerapp.ui.screens
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForwardIos
@@ -16,23 +14,15 @@ import androidx.compose.material.icons.filled.QueueMusic
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import fhnw.emoba.freezerapp.model.FreezerModel
 import fhnw.emoba.R
 import fhnw.emoba.freezerapp.data.classes.Track
-import fhnw.emoba.freezerapp.ui.theme.AppDarkColors
 
 @Composable
 fun HomeScreen(model: FreezerModel) {
@@ -76,9 +66,8 @@ private fun Body(model: FreezerModel) {
                     },
                 )
                 when {
-                    //TODO: change to lastPlayed
-                    tracksFound.isEmpty() -> Text("Noch keine Tracks gespielt")
-                    else -> HorizontalTrackList(tracksFound)
+                    lastPlayed.isEmpty() -> Text("Noch keine Tracks gespielt")
+                    else -> HorizontalTrackList(model, lastPlayed)
                 }
                 BasicRow(
                     content = {
@@ -88,7 +77,10 @@ private fun Body(model: FreezerModel) {
                         }
                     },
                 )
-                //TODO: scrollable list of favoriteTracks
+                when {
+                    favoriteTracks.isEmpty() -> Text("Noch keine gemerkten Tracks")
+                    else -> HorizontalTrackList(model, favoriteTracks)
+                }
                 BasicRow(
                     content = {
                         Text("Listensuche", fontWeight = FontWeight.Bold)
@@ -97,6 +89,7 @@ private fun Body(model: FreezerModel) {
                         }
                     },
                 )
+                //TODO: add Spacer
                 //TODO: tap on Logo to get "Impressum"/README as Scrollable Text
                 Image(
                     painter = painterResource(R.drawable.deezerlogo_white),
@@ -134,30 +127,43 @@ private fun BottomBar(model: FreezerModel) {
 }
 
 @Composable
-private fun HorizontalTrackList(tracks: List<Track>) {
+private fun HorizontalTrackList(model: FreezerModel, tracks: List<Track>) {
     val state = rememberLazyListState()
     LazyRow(
         state = state,
     ) {
-        items(tracks) { TrackPanel(it) }
+        items(tracks) { TrackPanel(model, it) }
     }
 }
 
 @Composable
-private fun TrackPanel(track: Track) {
-    Column(content = {
-//        Image(track.album.image)
-        SingleLineText("${track.id}")
-        SingleLineText(track.title)
-//        Text(track.artist.name)
-    },
+private fun TrackPanel(model: FreezerModel, track: Track) {
+    Column(
+        content = {
+            model.getCoverAsync(track, "small")?.also {
+                Image(
+                    bitmap = it,
+                    contentDescription = "Album Cover",
+                    modifier = Modifier
+                        .height(80.dp)
+                        .clip(CircleShape)
+                )
+            } ?: Image(
+                painter = painterResource(R.drawable.no_image),
+                contentDescription = "Album Cover nicht anzeigbar",
+                modifier = Modifier
+                    .height(80.dp)
+                    .clip(CircleShape)
+            )
+            SingleLineTextBold(track.artist.name)
+            SingleLineText(track.title)
+        },
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .padding(horizontal = 4.dp)
             .clip(RoundedCornerShape(20.dp))
             .width(140.dp)
-            .height(120.dp)
-            .background(color = MaterialTheme.colors.primary)
+            .height(160.dp)
             .padding(all = 4.dp)
             .clickable(onClick = {/*TODO: open in player*/ })
     )

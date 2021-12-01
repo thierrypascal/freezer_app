@@ -15,9 +15,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import java.time.format.TextStyle
 
 @Composable
 fun SearchIcon(){
@@ -42,9 +44,21 @@ fun BasicRow(content: @Composable RowScope.() -> Unit) {
 }
 
 @Composable
-fun SingleLineText(text: String){
+fun SingleLineTextBold(text: String){
     Text(
         text,
+        overflow = TextOverflow.Clip,
+        softWrap = true,
+        textAlign = TextAlign.Center,
+        maxLines = 1,
+        fontWeight = FontWeight.Bold,
+    )
+}
+
+@Composable
+fun SingleLineText(text: String){
+    Text(
+        text = text,
         overflow = TextOverflow.Clip,
         softWrap = true,
         textAlign = TextAlign.Center,

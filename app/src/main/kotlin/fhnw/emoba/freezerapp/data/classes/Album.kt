@@ -1,42 +1,48 @@
 package fhnw.emoba.freezerapp.data.classes
 
 import org.json.JSONObject
+import java.lang.Exception
 import java.net.URL
 
 data class Album(
     val id: Int,
     val title: String,
-    val cover: URL,
-//    val tracklist: List<Track>
+    val cover: String,
 
-//    val link: URL,
-//    val share: URL,
-//    val duration: Int,
-//    val release_date: String,
-//    val artist: Artist,
+    val link: URL,
+    val share: URL,
+    val duration: Int,
+    val release_date: String,
+    val artist: Artist,
+
+//    val tracklist: List<Track>
 ) {
     constructor(jsonObject: JSONObject) : this(
         id =            jsonObject.getInt("id"),
         title =         jsonObject.getString("title"),
-        cover =         URL(jsonObject.getString("cover")), //TODO: to Picture/Bitmap?
-//        link =          URL(jsonObject.getString("link")),
-//        share =         URL(jsonObject.getString("share")),
-//        duration =      jsonObject.getInt("duration"),
-//        release_date =  jsonObject.getString("release_date"), //TODO: to DateTime
+        cover =         jsonObject.getString("cover"), //TODO: to Picture/Bitmap?
+
+        link =          try {URL(jsonObject.getString("link"))}    catch (e: Exception) {URL("https://google.com/doesntexist")},
+        share =         try {URL(jsonObject.getString("share"))}    catch (e: Exception) {URL("https://google.com/doesntexist")},
+        duration =      try {jsonObject.getInt("duration")}    catch (e: Exception) {0},
+        release_date =  try {jsonObject.getString("release_date")}  catch (e: Exception) {"NaN"}, //TODO: to DateTime
+        artist =        try {Artist(jsonObject.getJSONObject("artist"))}    catch (e: Exception) {Artist()},
+
 ////        tracklist =     loadTracklistByUrl(URL(jsonObject.getString("tracklist"))) //TODO: load tracklist by url
-//        artist =      Artist(jsonObject.getJSONObject("artist")),
     )
 
     constructor() : this(
         id =            0,
         title =         "",
-        cover =         URL("https://google.com/doesntexist"), //TODO: to Picture/Bitmap?, no_image handling
-//        link =          URL("https://google.com/doesntexist"),
-//        share =         URL("https://google.com/doesntexist"),
-//        duration =      0,
-//        release_date =  "", //TODO: to DateTime
+        cover =         "https://google.com/doesntexist", //TODO: to Picture/Bitmap?, no_image handling
+
+        link =          URL("https://google.com/doesntexist"),
+        share =         URL("https://google.com/doesntexist"),
+        duration =      0,
+        release_date =  "", //TODO: to DateTime
+        artist =      Artist(),
+
 ////        tracklist =     loadTracklistByUrl(URL(jsonObject.getString("tracklist"))) //TODO: load tracklist by url
-//        artist =      Artist(),
     )
 
     override fun toString(): String {
