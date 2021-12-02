@@ -55,36 +55,42 @@ private fun Body(model: FreezerModel) {
                         Text("${clickedArtist.nb_album} Alben")
                         Text("${clickedArtist.nb_fan} Fans")
                     }, modifier = Modifier.weight(1f), verticalArrangement = Arrangement.Center)
-                    Box(content = {
-                        if (clickedArtistPicture != null) {
-                            clickedArtistPicture?.let {
-                                Image(
-                                    bitmap = it,
-                                    contentDescription = "Artist Bild",
-                                    modifier = Modifier
-                                        .padding(horizontal = 8.dp)
-                                        .fillMaxWidth()
-                                        .clip(RoundedCornerShape(10.dp))
-                                        .border(
-                                            2.dp,
-                                            MaterialTheme.colors.primary,
-                                            RoundedCornerShape(10.dp)
+                    Box(
+                        content = {
+                            if (isLoadingImg) {
+                                CircularProgressIndicator()
+                            } else {
+                                if (clickedArtistPicture != null) {
+                                    if (clickedArtistPicture != null) {
+                                        Image(
+                                            bitmap = clickedArtistPicture!!,
+                                            contentDescription = "Artist Bild",
+                                            modifier = Modifier
+                                                .padding(horizontal = 8.dp)
+                                                .fillMaxWidth()
+                                                .clip(RoundedCornerShape(10.dp))
+                                                .border(
+                                                    2.dp,
+                                                    MaterialTheme.colors.primary,
+                                                    RoundedCornerShape(10.dp)
+                                                )
                                         )
-                                )
-                            } ?: run {
-                                EmptyCircularCoverBigPlayer()
+                                    } else {
+                                        EmptyRoundedCoverBigDetail()
+                                    }
+                                }
                             }
-                        }
-                    }, modifier = Modifier
-                        .padding(start = 8.dp)
-                        .weight(2f))
+                        }, modifier = Modifier
+                            .padding(start = 8.dp)
+                            .weight(2f)
+                    )
                 })
                 BasicRow(
                     content = {
                         SingleLineTextBold("Lieder", 18.sp)
                         IconButton(onClick = {
                             /*TODO: redirect to TracklistScreen*/
-                            println("--------"+clickedArtistTracklist.size+"----------")
+                            println("--------" + clickedArtistTracklist.size + "----------")
                         }) {
                             Icon(Icons.Filled.ArrowForwardIos, "Lieder dieses Künstlers")
                         }

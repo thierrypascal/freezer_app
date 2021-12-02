@@ -47,19 +47,23 @@ private fun Body(model: FreezerModel) {
         Column(
             content = {
                 Column(content = {
-                    if (currentlyPlayingCover != null) {
-                        currentlyPlayingCover?.let {
-                            Image(
-                                bitmap = it,
-                                contentDescription = "Album Cover",
-                                modifier = Modifier
-                                    .padding(horizontal = 8.dp)
-                                    .fillMaxWidth()
-                                    .clip(CircleShape)
-                                    .border(2.dp, MaterialTheme.colors.primary, CircleShape)
-                            )
-                        } ?: run {
-                            EmptyCircularCoverBigPlayer()
+                    if (isLoadingImg) {
+                        CircularProgressIndicator()
+                    } else {
+                        if (currentlyPlayingCover != null) {
+                            if (currentlyPlayingCover != null) {
+                                Image(
+                                    bitmap = currentlyPlayingCover!!,
+                                    contentDescription = "Album Cover",
+                                    modifier = Modifier
+                                        .padding(horizontal = 8.dp)
+                                        .fillMaxWidth()
+                                        .clip(CircleShape)
+                                        .border(2.dp, MaterialTheme.colors.primary, CircleShape)
+                                )
+                            } else {
+                                EmptyCircularCoverBigPlayer()
+                            }
                         }
                     }
                     Spacer(modifier = Modifier.height(40.dp))
@@ -145,7 +149,7 @@ private fun BottomBar(model: FreezerModel) {
                         val ex = tracksFound.find { track -> track.id == currentlyPlaying.id }
                         if (ex != null) {
                             favoriteTracks = favoriteTracks + ex
-                        }else{
+                        } else {
                             favoriteTracks = favoriteTracks + currentlyPlaying
                         }
                     }

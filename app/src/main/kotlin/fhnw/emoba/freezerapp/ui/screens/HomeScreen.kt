@@ -141,36 +141,36 @@ private fun TrackPanel(model: FreezerModel, track: Track, type: Int) {
     with(model) {
         Column(
             content = {
-                if (isLoadingImg){
+                if (isLoadingImg) {
                     CircularProgressIndicator()
-                }else{
-                    when (type){
+                } else {
+                    when (type) {
                         0 -> {
-                            if (lastPlayed.isNotEmpty()){
-                                lastPlayedCover[track.id]?.let {
+                            if (lastPlayed.isNotEmpty()) {
+                                if (lastPlayedCover[track.id] != null) {
                                     Image(
-                                        bitmap = it,
+                                        bitmap = lastPlayedCover[track.id]!!,
                                         contentDescription = "Album Cover",
                                         modifier = Modifier
                                             .height(80.dp)
                                             .clip(CircleShape)
                                     )
-                                } ?: run {
+                                } else {
                                     EmptyCircularCover()
                                 }
                             }
                         }
                         1 -> {
-                            if (favoriteTracks.isNotEmpty()){
-                                favoriteTracksCover[track.id]?.let {
+                            if (favoriteTracks.isNotEmpty()) {
+                                if (favoriteTracksCover[track.id] != null) {
                                     Image(
-                                        bitmap = it,
+                                        bitmap = favoriteTracksCover[track.id]!!,
                                         contentDescription = "Album Cover",
                                         modifier = Modifier
                                             .height(80.dp)
                                             .clip(CircleShape)
                                     )
-                                } ?: run {
+                                } else {
                                     EmptyCircularCover()
                                 }
                             }
