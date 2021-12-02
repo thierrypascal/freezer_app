@@ -145,6 +145,8 @@ private fun BottomBar(model: FreezerModel) {
                         val ex = tracksFound.find { track -> track.id == currentlyPlaying.id }
                         if (ex != null) {
                             favoriteTracks = favoriteTracks + ex
+                        }else{
+                            favoriteTracks = favoriteTracks + currentlyPlaying
                         }
                     }
                 }) {

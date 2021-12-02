@@ -268,7 +268,10 @@ private fun ListTile(model: FreezerModel, element: Any, type: Int) {
                                 },
                                 modifier = Modifier
                                     .width(getScreenWidth().dp - 150.dp)
-                                    .clickable(onClick = {/*TODO: show more info about artist with show tracklist*/ })
+                                    .clickable(onClick = {
+                                        getClickedArtistAsync(artist.id)
+                                        currentScreen = Screen.ARTISTDETAIL
+                                    })
                             )
                         })
                         IconButton(onClick = {

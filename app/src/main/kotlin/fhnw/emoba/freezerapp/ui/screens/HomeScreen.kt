@@ -184,7 +184,7 @@ private fun TrackPanel(model: FreezerModel, track: Track, type: Int) {
             modifier = Modifier
                 .clip(RoundedCornerShape(20.dp))
                 .width(140.dp)
-                .height(160.dp)
+                .height(140.dp)
                 .padding(all = 4.dp)
                 .clickable(onClick = {
                     getClickedTrackAsync(track.id, true)

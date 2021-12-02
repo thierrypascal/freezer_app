@@ -91,7 +91,8 @@ private fun ListTile(model: FreezerModel, track: Track) {
                         modifier = Modifier
                             .width(getScreenWidth().dp - 150.dp)
                             .clickable(onClick = {
-                                /*TODO: play track*/
+                                getClickedTrackAsync(track.id, true)
+                                currentScreen = Screen.PLAYER
                             })
                     )
                 })

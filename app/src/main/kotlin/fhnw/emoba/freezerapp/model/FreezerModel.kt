@@ -227,7 +227,7 @@ class FreezerModel(val service: FreezerService) {
         isLoading = true
         radiosFound = emptyList()
         modelScope.launch {
-            radiosFound = service.requestRadio(searchString)
+            radiosFound = service.requestRadio()
             radiosFound = radiosFound.sortedBy { radio -> radio.title }
             isLoading = false
         }

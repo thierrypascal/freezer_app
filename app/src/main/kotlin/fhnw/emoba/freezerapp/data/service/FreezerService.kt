@@ -12,11 +12,11 @@ import javax.net.ssl.HttpsURLConnection
 
 class FreezerService {
     private val baseURL = "https://api.deezer.com/"
-    private val appendRadioUrl = "search/radio?q="
     private val appendSearchUrl = "search?q="
     private val appendTrackUrl = "track/"
     private val appendAlbumUrl = "album/"
     private val appendArtistUrl = "artist/"
+    private val appendRadioUrl = "radio/top"
     private val appendRadioByIdUrl = "radio/"
 
     fun requestSearch(searchFilter: String): List<Track>{
@@ -88,8 +88,8 @@ class FreezerService {
         }
     }
 
-    fun requestRadio(searchFilter: String): List<Radio>{
-        val url = "$baseURL$appendRadioUrl$searchFilter"
+    fun requestRadio(): List<Radio>{
+        val url = "$baseURL$appendRadioUrl"
         try {
             val data = JSONObject(content(url))
             val trackData = data.getJSONArray("data")

@@ -24,13 +24,13 @@ data class Track(
         id =                        jsonObject.getInt("id"),
         title =                     jsonObject.getString("title").trim(),
         title_short =               jsonObject.getString("title_short").trim(),
-        link =              URL(    jsonObject.getString("link")),
         duration =                  jsonObject.getInt("duration"),
         explicit_lyrics =           jsonObject.getBoolean("explicit_lyrics"),
         preview =                   jsonObject.getString("preview"),
         artist =                    Artist(jsonObject.getJSONObject("artist")),
         album =                     Album(jsonObject.getJSONObject("album")),
 
+        link =              try {URL(jsonObject.getString("link"))}     catch (e: Exception) {URL("https://google.com/doesntexist")},
         share =             try {URL(jsonObject.getString("share"))}    catch (e: Exception) {URL("https://google.com/doesntexist")},
         track_position =    try {jsonObject.getInt("track_position")}   catch (e: Exception) {0},
         release_date =      try {jsonObject.getString("release_date")}  catch (e: Exception) {"NaN"}, //TODO: to DateTime

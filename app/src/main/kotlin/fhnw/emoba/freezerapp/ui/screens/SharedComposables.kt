@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIos
@@ -215,5 +216,18 @@ fun EmptyCircularCoverBigPlayer() {
             .fillMaxWidth()
             .clip(CircleShape)
             .border(2.dp, MaterialTheme.colors.primary, CircleShape)
+    )
+}
+
+@Composable
+fun EmptyRoundedCoverBigDetail() {
+    Image(
+        painter = painterResource(R.drawable.no_image),
+        contentDescription = "Bild nicht verfügbar",
+        modifier = Modifier
+            .padding(horizontal = 8.dp)
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(10.dp))
+            .border(2.dp, MaterialTheme.colors.primary, RoundedCornerShape(10.dp))
     )
 }

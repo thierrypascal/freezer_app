@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForwardIos
@@ -50,30 +51,41 @@ private fun Body(model: FreezerModel) {
             content = {
                 Row(content = {
                     Column(content = {
-                        SingleLineTextBold("Name")
-                        Text("0 Alben")
-                        Text("0 Fans")
-                    })
-                    if (clickedArtistPicture != null) {
-                        clickedArtistPicture?.let {
-                            Image(
-                                bitmap = it,
-                                contentDescription = "Artist Bild",
-                                modifier = Modifier
-                                    .padding(horizontal = 8.dp)
-                                    .fillMaxWidth()
-                                    .clip(CircleShape)
-                                    .border(2.dp, MaterialTheme.colors.primary, CircleShape)
-                            )
-                        } ?: run {
-                            EmptyCircularCoverBigPlayer()
+                        SingleLineTextBold(clickedArtist.name)
+                        Text("${clickedArtist.nb_album} Alben")
+                        Text("${clickedArtist.nb_fan} Fans")
+                    }, modifier = Modifier.weight(1f), verticalArrangement = Arrangement.Center)
+                    Box(content = {
+                        if (clickedArtistPicture != null) {
+                            clickedArtistPicture?.let {
+                                Image(
+                                    bitmap = it,
+                                    contentDescription = "Artist Bild",
+                                    modifier = Modifier
+                                        .padding(horizontal = 8.dp)
+                                        .fillMaxWidth()
+                                        .clip(RoundedCornerShape(10.dp))
+                                        .border(
+                                            2.dp,
+                                            MaterialTheme.colors.primary,
+                                            RoundedCornerShape(10.dp)
+                                        )
+                                )
+                            } ?: run {
+                                EmptyCircularCoverBigPlayer()
+                            }
                         }
-                    }
+                    }, modifier = Modifier
+                        .padding(start = 8.dp)
+                        .weight(2f))
                 })
                 BasicRow(
                     content = {
                         SingleLineTextBold("Lieder", 18.sp)
-                        IconButton(onClick = { /*TODO: redirect to TracklistScreen*/ }) {
+                        IconButton(onClick = {
+                            /*TODO: redirect to TracklistScreen*/
+                            println("--------"+clickedArtistTracklist.size+"----------")
+                        }) {
                             Icon(Icons.Filled.ArrowForwardIos, "Lieder dieses Künstlers")
                         }
                     },
@@ -147,7 +159,7 @@ private fun ListTile(model: FreezerModel, track: Track) {
                                     //TODO: request and redirect to detailPage
                                 }
                                 1 -> {
-                                    if (!favoriteTracks.contains(track)){
+                                    if (!favoriteTracks.contains(track)) {
                                         favoriteTracks = favoriteTracks + track
                                     }
                                 }
