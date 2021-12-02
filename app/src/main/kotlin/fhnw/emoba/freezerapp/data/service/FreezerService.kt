@@ -11,7 +11,6 @@ import java.net.URL
 import javax.net.ssl.HttpsURLConnection
 
 class FreezerService {
-    //TODO: load classes with data from deezer api
     private val baseURL = "https://api.deezer.com/"
     private val appendRadioUrl = "radio/top"
     private val appendSearchUrl = "search?q="
@@ -35,7 +34,6 @@ class FreezerService {
             }
             return list
         }catch (e: Exception){
-            //TODO: handle Exception correctly
             println("$url: $e")
             return emptyList()
         }
@@ -47,7 +45,6 @@ class FreezerService {
             val data = JSONObject(content(url))
             return Track(data)
         } catch (e: Exception) {
-            //TODO: handle Exception correctly
             println("$url: $e")
             return Track()
         }
@@ -59,7 +56,6 @@ class FreezerService {
             val data = JSONObject(content(url))
             return Artist(data)
         } catch (e: Exception) {
-            //TODO: handle Exception correctly
             println("$url: $e")
             return Artist()
         }
@@ -71,7 +67,6 @@ class FreezerService {
             val data = JSONObject(content(url))
             return Album(data)
         } catch (e: Exception) {
-            //TODO: handle Exception correctly
             println("$url: $e")
             return Album()
         }
@@ -88,7 +83,6 @@ class FreezerService {
             }
             return list
         }catch (e: Exception){
-            //TODO: handle Exception correctly
             println("$url: $e")
             return emptyList()
         }
@@ -107,7 +101,7 @@ class FreezerService {
             val bitmap = BitmapFactory.decodeByteArray(allBytes, 0, allBytes.size)
 
             return bitmap.asImageBitmap()
-        } catch (e: Exception) {     //todo: bessere Loesung finden. So wird der Fehler nur kaschiert
+        } catch (e: Exception) {
             println(e)
             return null
         }

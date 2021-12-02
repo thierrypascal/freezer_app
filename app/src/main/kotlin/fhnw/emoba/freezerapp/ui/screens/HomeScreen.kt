@@ -10,7 +10,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForwardIos
-import androidx.compose.material.icons.filled.QueueMusic
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,6 +28,7 @@ fun HomeScreen(model: FreezerModel) {
     val scaffoldState = rememberScaffoldState()
 
     with(model) {
+        getCoverAsync()
         Scaffold(
             scaffoldState = scaffoldState,
             topBar = { TopBar(model = model) },
@@ -41,13 +41,13 @@ fun HomeScreen(model: FreezerModel) {
 @Composable
 private fun TopBar(model: FreezerModel) {
     with(model) {
-            TopAppBar(
-                title = { Text(text = "" /*TODO: add golden circle*/) },
-                actions = { SearchIcon(model) },
-                backgroundColor = MaterialTheme.colors.background,
-                contentColor = MaterialTheme.colors.secondary,
-                elevation = 0.dp,
-            )
+        TopAppBar(
+            title = { InofficialLogo(model) },
+            actions = { SearchIcon(model) },
+            backgroundColor = MaterialTheme.colors.background,
+            contentColor = MaterialTheme.colors.secondary,
+            elevation = 0.dp,
+        )
     }
 }
 
@@ -135,33 +135,44 @@ private fun HorizontalTrackList(model: FreezerModel, tracks: List<Track>) {
 
 @Composable
 private fun TrackPanel(model: FreezerModel, track: Track) {
-    Column(
-        content = {
-            model.getCoverAsync(track, "small")?.also {
-                Image(
-                    bitmap = it,
-                    contentDescription = "Album Cover",
-                    modifier = Modifier
-                        .height(80.dp)
-                        .clip(CircleShape)
-                )
-            } ?: Image(
-                painter = painterResource(R.drawable.no_image),
-                contentDescription = "Album Cover nicht anzeigbar",
-                modifier = Modifier
-                    .height(80.dp)
-                    .clip(CircleShape)
-            )
-            SingleLineTextBold(track.artist.name)
-            SingleLineTextLight(track.title)
-        },
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier
-            .padding(horizontal = 4.dp)
-            .clip(RoundedCornerShape(20.dp))
-            .width(140.dp)
-            .height(160.dp)
-            .padding(all = 4.dp)
-            .clickable(onClick = {/*TODO: open in player*/ })
-    )
+    with(model) {
+        Column(
+            content = {
+                //TODO: while loading?
+                if (isLoadingImg){
+                    CircularProgressIndicator()
+                }else{
+                    if (favoriteTracks.isNotEmpty()){
+                        favoriteTracksCover[track.id]?.let {
+                            Image(
+                                bitmap = it,
+                                contentDescription = "Album Cover",
+                                modifier = Modifier
+                                    .height(80.dp)
+                                    .clip(CircleShape)
+                            )
+                        } ?: run {
+                            Image(
+                                painter = painterResource(R.drawable.no_image),
+                                contentDescription = "Album Cover nicht verfügbar",
+                                modifier = Modifier
+                                    .height(80.dp)
+                                    .clip(CircleShape)
+                            )
+                        }
+                    }
+                }
+                SingleLineTextBold(track.artist.name)
+                SingleLineTextLight(track.title)
+            },
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .padding(horizontal = 4.dp)
+                .clip(RoundedCornerShape(20.dp))
+                .width(140.dp)
+                .height(160.dp)
+                .padding(all = 4.dp)
+                .clickable(onClick = {/*TODO: open in player*/ })
+        )
+    }
 }

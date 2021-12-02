@@ -10,7 +10,6 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.QueueMusic
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -45,7 +44,7 @@ private fun TopBar(model: FreezerModel) {
     val focusManager = LocalFocusManager.current
     with(model) {
         TopAppBar(
-            title = { Text(text = "" /*TODO: add golden circle*/) },
+            title = { Text("") },
             navigationIcon = { BackIcon(model) },
             actions = {
                 TextField(
@@ -95,7 +94,9 @@ private fun Body(model: FreezerModel) {
                     if (tracksFound.isNotEmpty()) {
                         LazyColumn(
                             state = state,
-                            modifier = Modifier.padding(horizontal = 8.dp).fillMaxSize()
+                            modifier = Modifier
+                                .padding(horizontal = 8.dp)
+                                .fillMaxSize()
                         ) {
                             items(tracksFound) { ListTile(model, it, 0) }
                         }
@@ -114,7 +115,9 @@ private fun Body(model: FreezerModel) {
                     if (artistsFound.isNotEmpty()) {
                         LazyColumn(
                             state = state,
-                            modifier = Modifier.padding(horizontal = 8.dp).fillMaxSize()
+                            modifier = Modifier
+                                .padding(horizontal = 8.dp)
+                                .fillMaxSize()
                         ) {
                             items(artistsFound) { ListTile(model, it, 1) }
                         }
@@ -133,7 +136,9 @@ private fun Body(model: FreezerModel) {
                     if (albumsFound.isNotEmpty()) {
                         LazyColumn(
                             state = state,
-                            modifier = Modifier.padding(horizontal = 8.dp).fillMaxSize()
+                            modifier = Modifier
+                                .padding(horizontal = 8.dp)
+                                .fillMaxSize()
                         ) {
                             items(albumsFound) { ListTile(model, it, 2) }
                         }
@@ -152,7 +157,9 @@ private fun Body(model: FreezerModel) {
                     if (radiosFound.isNotEmpty()) {
                         LazyColumn(
                             state = state,
-                            modifier = Modifier.padding(horizontal = 8.dp).fillMaxSize()
+                            modifier = Modifier
+                                .padding(horizontal = 8.dp)
+                                .fillMaxSize()
                         ) {
                             items(radiosFound) { ListTile(model, it, 3) }
                         }

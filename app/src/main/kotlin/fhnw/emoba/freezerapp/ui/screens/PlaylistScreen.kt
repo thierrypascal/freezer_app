@@ -34,7 +34,7 @@ fun PlaylistScreen(model: FreezerModel) {
 
 @Composable
 private fun TopBar(model: FreezerModel) {
-    StandardAppBottomBar(model)
+    StandardTopAppBar(model)
 }
 
 @Composable

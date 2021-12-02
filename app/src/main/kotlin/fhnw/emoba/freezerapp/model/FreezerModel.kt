@@ -35,6 +35,8 @@ class FreezerModel(val service: FreezerService) {
     var clickedArtist: Artist by mutableStateOf(Artist())
     var clickedAlbum: Album by mutableStateOf(Album())
 
+    var favoriteTracksCover: Map<Int, ImageBitmap?> = mutableMapOf()
+
     var isLoading by mutableStateOf(false)
     var isLoadingImg by mutableStateOf(false)
 
@@ -100,15 +102,19 @@ class FreezerModel(val service: FreezerService) {
         }
     }
 
-    fun getCoverAsync(track: Track, size: String): ImageBitmap? {
-        //TODO: implement async request for img with simple caching
-//        isLoading = true
-//        var img: ImageBitmap? = null
-//        modelScope.launch {
-//            img = service.requestCover(track, size)
-//            isLoading = false
-//        }
-        return null
+    fun getCoverAsync() {
+        if (favoriteTracks.isNotEmpty()){
+            isLoadingImg = true
+            modelScope.launch {
+                favoriteTracks.forEach{t ->
+                    val coverMap: HashMap<Int, ImageBitmap?> = hashMapOf(
+                        t.id to service.requestCover(t, "big"),
+                    )
+                    favoriteTracksCover = favoriteTracksCover + coverMap
+                }
+                isLoadingImg = false
+            }
+        }
     }
 
     fun getScreenWidth(): Int {

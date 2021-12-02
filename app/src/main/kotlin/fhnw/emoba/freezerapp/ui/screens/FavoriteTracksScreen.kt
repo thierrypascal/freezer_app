@@ -35,7 +35,7 @@ fun FavoriteTracksScreen(model: FreezerModel) {
 @Composable
 private fun TopBar(model: FreezerModel) {
     with(model) {
-        StandardAppBottomBar(model)
+        StandardTopAppBar(model)
     }
 }
 
