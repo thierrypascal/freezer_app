@@ -36,6 +36,7 @@ class FreezerModel(val service: FreezerService) {
     var clickedAlbum: Album by mutableStateOf(Album())
 
     var favoriteTracksCover: Map<Int, ImageBitmap?> = mutableMapOf()
+    var lastPlayedCover: Map<Int, ImageBitmap?> = mutableMapOf()
 
     var isLoading by mutableStateOf(false)
     var isLoadingImg by mutableStateOf(false)
@@ -111,6 +112,19 @@ class FreezerModel(val service: FreezerService) {
                         t.id to service.requestCover(t, "big"),
                     )
                     favoriteTracksCover = favoriteTracksCover + coverMap
+                }
+                isLoadingImg = false
+            }
+        }
+
+        if (lastPlayed.isNotEmpty()){
+            isLoadingImg = true
+            modelScope.launch {
+                lastPlayed.forEach{t ->
+                    val coverMap: HashMap<Int, ImageBitmap?> = hashMapOf(
+                        t.id to service.requestCover(t, "big"),
+                    )
+                    lastPlayedCover = lastPlayedCover + coverMap
                 }
                 isLoadingImg = false
             }

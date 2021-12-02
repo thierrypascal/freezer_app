@@ -1,6 +1,8 @@
 package fhnw.emoba.freezerapp.ui.screens
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIos
@@ -9,11 +11,14 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import fhnw.emoba.R
 import fhnw.emoba.freezerapp.model.FreezerModel
 import fhnw.emoba.freezerapp.model.Screen
 
@@ -107,8 +112,32 @@ fun StandardTopAppBar(model: FreezerModel) {
 fun InofficialLogo(model: FreezerModel) {
     with(model) {
         Column(content = {
-            Text(text = subtitle, fontWeight = FontWeight.Light, color = MaterialTheme.colors.primary, modifier = Modifier.align(alignment = Alignment.End).offset(0.dp, 10.dp), fontSize = 13.sp)
-            Text(text = title, fontWeight = FontWeight.ExtraBold, color = MaterialTheme.colors.primary, modifier = Modifier.align(alignment = Alignment.Start))
+            Text(
+                text = subtitle,
+                fontWeight = FontWeight.Light,
+                color = MaterialTheme.colors.primary,
+                modifier = Modifier
+                    .align(alignment = Alignment.End)
+                    .offset(0.dp, 10.dp),
+                fontSize = 13.sp
+            )
+            Text(
+                text = title,
+                fontWeight = FontWeight.ExtraBold,
+                color = MaterialTheme.colors.primary,
+                modifier = Modifier.align(alignment = Alignment.Start)
+            )
         }, horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.width(140.dp))
     }
+}
+
+@Composable
+fun EmptyCircularCover() {
+    Image(
+        painter = painterResource(R.drawable.no_image),
+        contentDescription = "Album Cover nicht verfügbar",
+        modifier = Modifier
+            .height(80.dp)
+            .clip(CircleShape)
+    )
 }

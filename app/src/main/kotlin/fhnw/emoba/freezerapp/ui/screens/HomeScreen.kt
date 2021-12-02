@@ -67,7 +67,7 @@ private fun Body(model: FreezerModel) {
                     )
                     when {
                         lastPlayed.isEmpty() -> Text("Noch keine Tracks gespielt")
-                        else -> HorizontalTrackList(model, lastPlayed)
+                        else -> HorizontalTrackList(model, lastPlayed, 0)
                     }
                     BasicRow(
                         content = {
@@ -79,7 +79,7 @@ private fun Body(model: FreezerModel) {
                     )
                     when {
                         favoriteTracks.isEmpty() -> Text("Noch keine gemerkten Tracks")
-                        else -> HorizontalTrackList(model, favoriteTracks)
+                        else -> HorizontalTrackList(model, favoriteTracks, 1)
                     }
                     BasicRow(
                         content = {
@@ -124,17 +124,19 @@ private fun BottomBar(model: FreezerModel) {
 }
 
 @Composable
-private fun HorizontalTrackList(model: FreezerModel, tracks: List<Track>) {
+private fun HorizontalTrackList(model: FreezerModel, tracks: List<Track>, type: Int) {
+    //Type: 0 = lastPlayed, 1 = favoriteTracks
     val state = rememberLazyListState()
     LazyRow(
         state = state,
     ) {
-        items(tracks) { TrackPanel(model, it) }
+        items(tracks) { TrackPanel(model, it, type) }
     }
 }
 
 @Composable
-private fun TrackPanel(model: FreezerModel, track: Track) {
+private fun TrackPanel(model: FreezerModel, track: Track, type: Int) {
+    //Type: 0 = lastPlayed, 1 = favoriteTracks
     with(model) {
         Column(
             content = {
@@ -142,23 +144,36 @@ private fun TrackPanel(model: FreezerModel, track: Track) {
                 if (isLoadingImg){
                     CircularProgressIndicator()
                 }else{
-                    if (favoriteTracks.isNotEmpty()){
-                        favoriteTracksCover[track.id]?.let {
-                            Image(
-                                bitmap = it,
-                                contentDescription = "Album Cover",
-                                modifier = Modifier
-                                    .height(80.dp)
-                                    .clip(CircleShape)
-                            )
-                        } ?: run {
-                            Image(
-                                painter = painterResource(R.drawable.no_image),
-                                contentDescription = "Album Cover nicht verfügbar",
-                                modifier = Modifier
-                                    .height(80.dp)
-                                    .clip(CircleShape)
-                            )
+                    when (type){
+                        0 -> {
+                            if (lastPlayed.isNotEmpty()){
+                                lastPlayedCover[track.id]?.let {
+                                    Image(
+                                        bitmap = it,
+                                        contentDescription = "Album Cover",
+                                        modifier = Modifier
+                                            .height(80.dp)
+                                            .clip(CircleShape)
+                                    )
+                                } ?: run {
+                                    EmptyCircularCover()
+                                }
+                            }
+                        }
+                        1 -> {
+                            if (favoriteTracks.isNotEmpty()){
+                                favoriteTracksCover[track.id]?.let {
+                                    Image(
+                                        bitmap = it,
+                                        contentDescription = "Album Cover",
+                                        modifier = Modifier
+                                            .height(80.dp)
+                                            .clip(CircleShape)
+                                    )
+                                } ?: run {
+                                    EmptyCircularCover()
+                                }
+                            }
                         }
                     }
                 }
@@ -167,7 +182,6 @@ private fun TrackPanel(model: FreezerModel, track: Track) {
             },
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
-                .padding(horizontal = 4.dp)
                 .clip(RoundedCornerShape(20.dp))
                 .width(140.dp)
                 .height(160.dp)
