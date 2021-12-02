@@ -9,10 +9,15 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIos
 import androidx.compose.material.icons.filled.QueueMusic
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.outlined.PlayArrow
+import androidx.compose.material.icons.outlined.SkipNext
+import androidx.compose.material.icons.outlined.SkipPrevious
+import androidx.compose.material.icons.outlined.Stop
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -75,29 +80,83 @@ fun SingleLineTextLight(text: String, fontSize: TextUnit = 14.sp) {
 }
 
 @Composable
-fun SingleLineText(text: String) {
-    Text(
-        text = text,
-        overflow = TextOverflow.Clip,
-        softWrap = true,
-        textAlign = TextAlign.Center,
-        maxLines = 1,
-    )
-}
-
-@Composable
 fun StandardAppBottomBar(model: FreezerModel) {
     BottomAppBar(
         content = {
             IconButton(onClick = { model.currentScreen = Screen.PLAYLIST }) {
                 Icon(Icons.Filled.QueueMusic, "Playlist")
             }
-            //TODO: add miniplayer of currentlyPlaying
+            MiniPlayer(model)
         },
         backgroundColor = MaterialTheme.colors.background,
         contentColor = MaterialTheme.colors.secondary,
         elevation = 0.dp,
     )
+}
+
+@Composable
+fun MiniPlayer(model: FreezerModel) {
+    with(model) {
+        Row(
+            content = {
+                IconButton(
+                    onClick = { fromStart() },
+                    modifier = Modifier.size(60.dp),
+                    enabled = currentlyPlaying.id != 0,
+                ) {
+                    Icon(
+                        Icons.Outlined.SkipPrevious,
+                        "Zum Anfang",
+                        tint = if (currentlyPlaying.id != 0) MaterialTheme.colors.primary else Color.DarkGray,
+                        modifier = Modifier.size(30.dp)
+                    )
+                }
+                if (playerIsReady) {
+                    IconButton(
+                        onClick = { startPlayer() },
+                        modifier = Modifier.size(60.dp),
+                        enabled = currentlyPlaying.id != 0,
+                    ) {
+                        Icon(
+                            Icons.Outlined.PlayArrow,
+                            "Abspielen",
+                            tint = if (currentlyPlaying.id != 0) MaterialTheme.colors.primary else Color.DarkGray,
+                            modifier = Modifier.size(40.dp)
+                        )
+                    }
+                } else {
+                    IconButton(
+                        onClick = { pausePlayer() },
+                        modifier = Modifier.size(60.dp),
+                        enabled = currentlyPlaying.id != 0,
+                    ) {
+                        Icon(
+                            Icons.Outlined.Stop,
+                            "Abspielen",
+                            tint = if (currentlyPlaying.id != 0) MaterialTheme.colors.primary else Color.DarkGray,
+                            modifier = Modifier.size(40.dp)
+                        )
+                    }
+                }
+                IconButton(
+                    onClick = { nextTrack() },
+                    modifier = Modifier.size(60.dp),
+                    enabled = currentlyPlaying.id != 0,
+                ) {
+                    Icon(
+                        Icons.Outlined.SkipNext,
+                        "Nächstes Lied",
+                        tint = if (playlist.isNotEmpty() && currentlyPlaying.id != 0) MaterialTheme.colors.primary else Color.DarkGray,
+                        modifier = Modifier.size(30.dp)
+                    )
+                }
+            },
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(60.dp),
+            horizontalArrangement = Arrangement.Center
+        )
+    }
 }
 
 @Composable

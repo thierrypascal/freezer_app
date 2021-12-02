@@ -11,10 +11,12 @@ import androidx.compose.material.icons.filled.QueueMusic
 import androidx.compose.material.icons.outlined.PlayArrow
 import androidx.compose.material.icons.outlined.SkipNext
 import androidx.compose.material.icons.outlined.SkipPrevious
+import androidx.compose.material.icons.outlined.Stop
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import fhnw.emoba.freezerapp.model.FreezerModel
@@ -67,7 +69,7 @@ private fun Body(model: FreezerModel) {
                 Row(
                     content = {
                         IconButton(
-                            onClick = { /*TODO: to start/last track*/ },
+                            onClick = { fromStart() },
                             modifier = Modifier.size(100.dp)
                         ) {
                             Icon(
@@ -77,26 +79,39 @@ private fun Body(model: FreezerModel) {
                                 modifier = Modifier.size(60.dp)
                             )
                         }
-                        //TODO: if playing, stop icon
-                        IconButton(
-                            onClick = { /*TODO: player.play()*/ },
-                            modifier = Modifier.size(100.dp)
-                        ) {
-                            Icon(
-                                Icons.Outlined.PlayArrow,
-                                "Abspielen",
-                                tint = MaterialTheme.colors.primary,
-                                modifier = Modifier.fillMaxSize()
-                            )
+                        if (playerIsReady) {
+                            IconButton(
+                                onClick = { startPlayer() },
+                                modifier = Modifier.size(100.dp)
+                            ) {
+                                Icon(
+                                    Icons.Outlined.PlayArrow,
+                                    "Abspielen",
+                                    tint = MaterialTheme.colors.primary,
+                                    modifier = Modifier.fillMaxSize()
+                                )
+                            }
+                        } else {
+                            IconButton(
+                                onClick = { pausePlayer() },
+                                modifier = Modifier.size(100.dp)
+                            ) {
+                                Icon(
+                                    Icons.Outlined.Stop,
+                                    "Abspielen",
+                                    tint = MaterialTheme.colors.primary,
+                                    modifier = Modifier.fillMaxSize()
+                                )
+                            }
                         }
                         IconButton(
-                            onClick = { /*TODO: next track*/ },
+                            onClick = { nextTrack() },
                             modifier = Modifier.size(100.dp)
                         ) {
                             Icon(
                                 Icons.Outlined.SkipNext,
                                 "Nächstes Lied",
-                                tint = MaterialTheme.colors.primary,
+                                tint = if (playlist.isNotEmpty()) MaterialTheme.colors.primary else Color.DarkGray,
                                 modifier = Modifier.size(60.dp)
                             )
                         }
@@ -122,11 +137,12 @@ private fun BottomBar(model: FreezerModel) {
     with(model) {
         BottomAppBar(
             content = {
+                IconButton(onClick = { model.currentScreen = Screen.PLAYLIST }) {
+                    Icon(Icons.Filled.QueueMusic, "Playlist")
+                }
                 IconButton(onClick = {
-                    /*TODO: add current track to favoriteTracks*/
-                    //Vorsicht: nicht nur .contains, vergleich mit id und merkliste track von foundTracks hinzufügen
-                    if (!favoriteTracks.map { t -> t.id }.contains(currentlyPlaying.id)){
-                        val ex = tracksFound.find { track -> track.id == currentlyPlaying.id}
+                    if (!favoriteTracks.map { t -> t.id }.contains(currentlyPlaying.id)) {
+                        val ex = tracksFound.find { track -> track.id == currentlyPlaying.id }
                         if (ex != null) {
                             favoriteTracks = favoriteTracks + ex
                         }
@@ -134,7 +150,6 @@ private fun BottomBar(model: FreezerModel) {
                 }) {
                     Icon(Icons.Filled.PlaylistAdd, "Merken")
                 }
-                //TODO: add miniplayer of currentlyPlaying
             },
             backgroundColor = MaterialTheme.colors.background,
             contentColor = MaterialTheme.colors.secondary,

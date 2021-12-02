@@ -12,7 +12,7 @@ data class Track(
     val link: URL,
     val duration: Int,
     val explicit_lyrics: Boolean,
-    val preview: URL,
+    val preview: String,
     val artist: Artist,
     val album: Album,
 
@@ -27,7 +27,7 @@ data class Track(
         link =              URL(    jsonObject.getString("link")),
         duration =                  jsonObject.getInt("duration"),
         explicit_lyrics =           jsonObject.getBoolean("explicit_lyrics"),
-        preview =           URL(    jsonObject.getString("preview")),
+        preview =                   jsonObject.getString("preview"),
         artist =                    Artist(jsonObject.getJSONObject("artist")),
         album =                     Album(jsonObject.getJSONObject("album")),
 
@@ -43,7 +43,7 @@ data class Track(
         link =              URL("https://google.com/doesntexist"),
         duration =          0,
         explicit_lyrics =   true,
-        preview =           URL("https://google.com/doesntexist"),
+        preview =           "https://google.com/doesntexist",
         artist =          Artist(),
         album =           Album(),
 

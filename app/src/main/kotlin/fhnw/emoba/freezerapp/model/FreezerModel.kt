@@ -1,16 +1,16 @@
 package fhnw.emoba.freezerapp.model
 
 import android.content.res.Resources
+import android.media.AudioAttributes
+import android.media.MediaPlayer
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.ImageBitmap
 import fhnw.emoba.freezerapp.data.classes.*
 import fhnw.emoba.freezerapp.data.service.FreezerService
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import kotlin.collections.HashMap
 
 class FreezerModel(val service: FreezerService) {
     private val modelScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
@@ -43,6 +43,70 @@ class FreezerModel(val service: FreezerService) {
     var isLoading by mutableStateOf(false)
     var isLoadingImg by mutableStateOf(false)
 
+    var playerIsReady by mutableStateOf(true)
+    private var currentlyPlayingId = 0  // wird nur intern gebraucht, soll kein Recompose ausloesen, daher auch kein MutableState
+
+    private val player = MediaPlayer().apply {
+        setAudioAttributes(
+            AudioAttributes.Builder()
+                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                .build()
+        )
+        setOnPreparedListener(MediaPlayer.OnPreparedListener {
+            start()
+        })
+        setOnCompletionListener {
+            playerIsReady = true
+        }
+    }
+
+    //music player functions
+    fun startPlayer(){
+        playerIsReady = false
+        try {
+            if (currentlyPlayingId == currentlyPlaying.id && !player.isPlaying) {
+                player.start()
+            } else {
+                currentlyPlayingId = currentlyPlaying.id
+                player.reset()
+                player.setDataSource(currentlyPlaying.preview)
+                player.prepareAsync()
+            }
+        } catch (e: Exception) {
+            playerIsReady = true
+            println("Player couldn't start: $e")
+        }
+    }
+
+    fun pausePlayer() {
+        player.pause()
+        playerIsReady = true
+    }
+
+    fun fromStart() {
+        player.seekTo(0)
+        player.start()
+        playerIsReady = false
+    }
+
+    fun nextTrack() {
+        if (playlist.isNotEmpty()){
+            modelScope.launch {
+                getClickedTrackAsync(playlist[0].id, true)
+
+                //TODO: find a better solution
+                delay(100)
+
+                currentlyPlayingId = playlist[0].id
+                player.reset()
+                player.setDataSource(currentlyPlaying.preview)
+                player.prepareAsync()
+                playerIsReady = false
+
+                playlist = playlist - playlist[0]
+            }
+        }
+    }
 
     //load all lists
     fun getSearchAsync() {
