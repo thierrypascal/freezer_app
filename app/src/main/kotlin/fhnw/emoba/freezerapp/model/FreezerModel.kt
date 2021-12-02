@@ -7,13 +7,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.unit.dp
 import fhnw.emoba.freezerapp.data.classes.*
 import fhnw.emoba.freezerapp.data.service.FreezerService
 import kotlinx.coroutines.*
 import kotlin.collections.HashMap
 
-class FreezerModel(val service: FreezerService) {
+class FreezerModel(private val service: FreezerService) {
     private val modelScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     var widthDp by mutableStateOf(Resources.getSystem().displayMetrics.run { widthPixels / density })
@@ -30,7 +29,7 @@ class FreezerModel(val service: FreezerService) {
     var playlist: List<Track> by mutableStateOf(emptyList())
     var lastPlayed: List<Track> by mutableStateOf(emptyList())
     var favoriteTracks: List<Track> by mutableStateOf(emptyList())
-    var searchResult: List<Track> by mutableStateOf(emptyList())
+    private var searchResult: List<Track> by mutableStateOf(emptyList())
     var tracksFound: List<Track> by mutableStateOf(emptyList())
     var artistsFound: List<Artist> by mutableStateOf(emptyList())
     var albumsFound: List<Album> by mutableStateOf(emptyList())
@@ -170,7 +169,7 @@ class FreezerModel(val service: FreezerService) {
         }
     }
 
-    fun getClickedArtistPictureAsync(){
+    private fun getClickedArtistPictureAsync(){
         if (clickedArtist != null && clickedArtist != Artist()){
             isLoadingImg = true
             modelScope.launch {
@@ -193,7 +192,7 @@ class FreezerModel(val service: FreezerService) {
         }
     }
 
-    fun getClickedAlbumCoverAsync(){
+    private fun getClickedAlbumCoverAsync(){
         if (clickedAlbum != null && clickedAlbum != Album()){
             isLoadingImg = true
             modelScope.launch {
@@ -216,7 +215,7 @@ class FreezerModel(val service: FreezerService) {
         }
     }
 
-    fun getClickedRadioPictureAsync(){
+    private fun getClickedRadioPictureAsync(){
         if (clickedRadio != null && clickedRadio != Radio()){
             isLoadingImg = true
             modelScope.launch {
@@ -236,7 +235,7 @@ class FreezerModel(val service: FreezerService) {
         }
     }
 
-    fun getCurrentlyPlayingCoverAsync(){
+    private fun getCurrentlyPlayingCoverAsync(){
         if (currentlyPlaying != null && currentlyPlaying != Track()){
             isLoadingImg = true
             modelScope.launch {
