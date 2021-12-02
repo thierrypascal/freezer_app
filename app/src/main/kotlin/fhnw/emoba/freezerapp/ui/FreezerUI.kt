@@ -7,7 +7,6 @@ import fhnw.emoba.freezerapp.model.Screen
 import fhnw.emoba.freezerapp.ui.screens.*
 import fhnw.emoba.freezerapp.ui.theme.FreezerAppTheme
 
-
 @Composable
 fun FreezerUI(model: FreezerModel) {
     with(model) {

@@ -8,12 +8,12 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.QueueMusic
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import fhnw.emoba.freezerapp.data.classes.Track
 import fhnw.emoba.freezerapp.model.FreezerModel
 import fhnw.emoba.freezerapp.model.Screen
@@ -43,7 +43,14 @@ private fun Body(model: FreezerModel) {
     with(model) {
         Column(
             content = {
-                Text("Zuletzt gespielt", fontWeight = FontWeight.Bold)
+                BasicRow(
+                    content = {
+                        SingleLineTextBold("Zuletzt gespielt", 18.sp)
+                        IconButton(onClick = { lastPlayed = emptyList() }) {
+                            Icon(Icons.Outlined.Delete, "Liste leeren")
+                        }
+                    },
+                )
                 Column(content = {
                     if (lastPlayed.isNotEmpty()) {
                         LazyColumn(
@@ -89,7 +96,7 @@ private fun ListTile(model: FreezerModel, track: Track) {
                             SingleLineTextLight(text = track.artist.name)
                         },
                         modifier = Modifier
-                            .width(getScreenWidth().dp - 150.dp)
+                            .width(widthDp.dp - 150.dp)
                             .clickable(onClick = {
                                 getClickedTrackAsync(track.id, true)
                                 currentScreen = Screen.PLAYER

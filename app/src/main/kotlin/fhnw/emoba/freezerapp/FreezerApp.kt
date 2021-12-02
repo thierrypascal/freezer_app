@@ -7,7 +7,6 @@ import fhnw.emoba.freezerapp.data.service.FreezerService
 import fhnw.emoba.freezerapp.model.FreezerModel
 import fhnw.emoba.freezerapp.ui.FreezerUI
 
-
 object FreezerApp : EmobaApp {
     private lateinit var model: FreezerModel
 
@@ -16,7 +15,7 @@ object FreezerApp : EmobaApp {
         model = FreezerModel(service)
 
         //TODO: remove; Only for testing
-        model.searchString = "eminem"
+        model.searchString = "Eminem"
         model.getSearchAsync()
     }
 
@@ -24,5 +23,4 @@ object FreezerApp : EmobaApp {
     override fun CreateUI() {
         FreezerUI(model)
     }
-
 }

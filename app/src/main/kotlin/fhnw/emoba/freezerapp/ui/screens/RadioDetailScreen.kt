@@ -9,8 +9,9 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForwardIos
-import androidx.compose.runtime.Composable
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.outlined.Inventory2
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,6 +41,8 @@ private fun TopBar(model: FreezerModel) {
 @Composable
 private fun Body(model: FreezerModel) {
     val state = rememberLazyListState()
+    var expanded by remember { mutableStateOf(false) }
+    val items = listOf("Alle Songs zu Merkliste", "Alle Songs zu Warteliste")
 
     with(model) {
         Column(
@@ -78,7 +81,38 @@ private fun Body(model: FreezerModel) {
                             .weight(2f)
                     )
                 })
-                SingleLineTextBold("Lieder dieses Radios", 18.sp)
+                BasicRow(content = {
+                    SingleLineTextBold("Lieder dieses Radios", 18.sp)
+                    Box(content = {
+                        IconButton(onClick = {
+                            expanded = true
+                        }) {
+                            Icon(Icons.Outlined.Inventory2, "Optionen")
+                        }
+                        DropdownMenu(
+                            expanded = expanded,
+                            onDismissRequest = { expanded = false },
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            items.forEachIndexed { index, s ->
+                                DropdownMenuItem(onClick = {
+                                    expanded = false
+                                    //TODO: show snackbar?
+                                    when (index) {
+                                        0 -> {
+                                            favoriteTracks = favoriteTracks + clickedRadioTracklist
+                                        }
+                                        1 -> {
+                                            playlist = playlist + clickedRadioTracklist
+                                        }
+                                    }
+                                }) {
+                                    Text(s)
+                                }
+                            }
+                        }
+                    })
+                })
                 if (clickedRadioTracklist.isNotEmpty()) {
                     LazyColumn(
                         state = state,

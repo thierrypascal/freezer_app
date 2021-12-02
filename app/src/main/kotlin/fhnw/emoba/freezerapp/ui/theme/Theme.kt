@@ -22,7 +22,7 @@ val AppDarkColors = darkColors(
 )
 
 @Composable
-fun FreezerAppTheme(content: @Composable() () -> Unit){
+fun FreezerAppTheme(content: @Composable () -> Unit){
     val colors = AppDarkColors
 
     MaterialTheme(

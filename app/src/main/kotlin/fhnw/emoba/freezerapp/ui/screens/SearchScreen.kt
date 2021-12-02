@@ -20,7 +20,6 @@ import androidx.compose.ui.unit.dp
 import fhnw.emoba.freezerapp.data.classes.Album
 import fhnw.emoba.freezerapp.data.classes.Artist
 import fhnw.emoba.freezerapp.data.classes.Radio
-import fhnw.emoba.freezerapp.data.classes.Track
 import fhnw.emoba.freezerapp.model.FreezerModel
 import fhnw.emoba.freezerapp.model.Screen
 import fhnw.emoba.freezerapp.model.Tabs
@@ -165,7 +164,6 @@ private fun Body(model: FreezerModel) {
                             items(radiosFound) { ListTile(model, it, 3) }
                         }
                     } else {
-                        //TODO: Radio seems to just be a list, no searching required?
                         Box(
                             modifier = Modifier.fillMaxSize(),
                             contentAlignment = Alignment.Center
@@ -184,9 +182,6 @@ private fun Body(model: FreezerModel) {
 @Composable
 private fun ListTile(model: FreezerModel, element: Any, type: Int) {
     with(model) {
-        var expanded by remember { mutableStateOf(false) }
-        val items = listOf("Songs zu Merkliste", "Songs zu Warteliste")
-
         when (type) {
             1 -> {
                 val artist = element as Artist
@@ -205,40 +200,13 @@ private fun ListTile(model: FreezerModel, element: Any, type: Int) {
                                     Text("")
                                 },
                                 modifier = Modifier
-                                    .width(getScreenWidth().dp - 150.dp)
+                                    .width(widthDp.dp - 150.dp)
                                     .clickable(onClick = {
                                         getClickedArtistAsync(artist.id)
                                         currentScreen = Screen.ARTISTDETAIL
                                     })
                             )
                         })
-                        IconButton(onClick = {
-                            expanded = true
-                        }) {
-                            Icon(Icons.Filled.MoreVert, "Optionen")
-                        }
-                        DropdownMenu(
-                            expanded = expanded,
-                            onDismissRequest = { expanded = false },
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            items.forEachIndexed { index, s ->
-                                DropdownMenuItem(onClick = {
-                                    expanded = false
-                                    //TODO: show snackbar?
-                                    when (index) {
-                                        0 -> {
-                                            //TODO: favoriteTracks = favoriteTracks + artist.tracklist
-                                        }
-                                        1 -> {
-                                            //TODO: playlist = playlist + artist.tracklist
-                                        }
-                                    }
-                                }) {
-                                    Text(s)
-                                }
-                            }
-                        }
                     },
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.fillMaxWidth(),
@@ -262,40 +230,13 @@ private fun ListTile(model: FreezerModel, element: Any, type: Int) {
                                     Text("")
                                 },
                                 modifier = Modifier
-                                    .width(getScreenWidth().dp - 150.dp)
+                                    .width(widthDp.dp - 150.dp)
                                     .clickable(onClick = {
                                         getClickedAlbumAsync(album.id)
                                         currentScreen = Screen.ALBUMDETAIL
                                     })
                             )
                         })
-                        IconButton(onClick = {
-                            expanded = true
-                        }) {
-                            Icon(Icons.Filled.MoreVert, "Optionen")
-                        }
-                        DropdownMenu(
-                            expanded = expanded,
-                            onDismissRequest = { expanded = false },
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            items.forEachIndexed { index, s ->
-                                DropdownMenuItem(onClick = {
-                                    expanded = false
-                                    //TODO: show snackbar?
-                                    when (index) {
-                                        0 -> {
-                                            //TODO: favoriteTracks = favoriteTracks + album.tracklist
-                                        }
-                                        1 -> {
-                                            //TODO: playlist = playlist + album.tracklist
-                                        }
-                                    }
-                                }) {
-                                    Text(s)
-                                }
-                            }
-                        }
                     },
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.fillMaxWidth(),
@@ -319,40 +260,13 @@ private fun ListTile(model: FreezerModel, element: Any, type: Int) {
                                     Text("")
                                 },
                                 modifier = Modifier
-                                    .width(getScreenWidth().dp - 150.dp)
+                                    .width(widthDp.dp - 150.dp)
                                     .clickable(onClick = {
                                         getClickedRadioAsync(radio.id)
                                         currentScreen = Screen.RADIODETAIL
                                     })
                             )
                         })
-                        IconButton(onClick = {
-                            expanded = true
-                        }) {
-                            Icon(Icons.Filled.MoreVert, "Optionen")
-                        }
-                        DropdownMenu(
-                            expanded = expanded,
-                            onDismissRequest = { expanded = false },
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            items.forEachIndexed { index, s ->
-                                DropdownMenuItem(onClick = {
-                                    expanded = false
-                                    //TODO: show snackbar?
-                                    when (index) {
-                                        0 -> {
-                                            //TODO: favoriteTracks = favoriteTracks + radio.tracklist
-                                        }
-                                        1 -> {
-                                            //TODO: playlist = playlist + radio.tracklist
-                                        }
-                                    }
-                                }) {
-                                    Text(s)
-                                }
-                            }
-                        }
                     },
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.fillMaxWidth(),

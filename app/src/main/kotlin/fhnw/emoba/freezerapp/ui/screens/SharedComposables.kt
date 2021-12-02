@@ -249,6 +249,7 @@ fun EmptyRoundedCoverBigDetail() {
 
 @Composable
 fun TrackListTile(model: FreezerModel, track: Track) {
+
     var expanded by remember { mutableStateOf(false) }
     val items = listOf("Zu Merkliste", "Zu Warteliste")
     with(model) {
@@ -267,42 +268,44 @@ fun TrackListTile(model: FreezerModel, track: Track) {
                             SingleLineTextLight(text = track.artist.name)
                         },
                         modifier = Modifier
-                            .width(getScreenWidth().dp - 150.dp)
+                            .width(widthDp.dp - 150.dp)
                             .clickable(onClick = {
                                 getClickedTrackAsync(track.id, true)
                                 currentScreen = Screen.PLAYER
                             })
                     )
                 })
-                IconButton(onClick = {
-                    expanded = true
-                }) {
-                    Icon(Icons.Filled.MoreVert, "Optionen")
-                }
-                DropdownMenu(
-                    expanded = expanded,
-                    onDismissRequest = { expanded = false },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    items.forEachIndexed { index, s ->
-                        DropdownMenuItem(onClick = {
-                            expanded = false
-                            //TODO: show snackbar?
-                            when (index) {
-                                0 -> {
-                                    if (!favoriteTracks.contains(track)) {
-                                        favoriteTracks = favoriteTracks + track
+                Box(content = {
+                    IconButton(onClick = {
+                        expanded = true
+                    }) {
+                        Icon(Icons.Filled.MoreVert, "Optionen")
+                    }
+                    DropdownMenu(
+                        expanded = expanded,
+                        onDismissRequest = { expanded = false },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        items.forEachIndexed { index, s ->
+                            DropdownMenuItem(onClick = {
+                                expanded = false
+                                //TODO: show snackbar?
+                                when (index) {
+                                    0 -> {
+                                        if (!favoriteTracks.contains(track)) {
+                                            favoriteTracks = favoriteTracks + track
+                                        }
+                                    }
+                                    1 -> {
+                                        playlist = playlist + track
                                     }
                                 }
-                                1 -> {
-                                    playlist = playlist + track
-                                }
+                            }) {
+                                Text(s)
                             }
-                        }) {
-                            Text(s)
                         }
                     }
-                }
+                })
             },
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier.fillMaxWidth(),

@@ -7,6 +7,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.unit.dp
 import fhnw.emoba.freezerapp.data.classes.*
 import fhnw.emoba.freezerapp.data.service.FreezerService
 import kotlinx.coroutines.*
@@ -14,6 +15,8 @@ import kotlin.collections.HashMap
 
 class FreezerModel(val service: FreezerService) {
     private val modelScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+
+    var widthDp by mutableStateOf(Resources.getSystem().displayMetrics.run { widthPixels / density })
 
     var currentScreen by mutableStateOf(Screen.HOME)
     var currentTab by mutableStateOf(Tabs.TRACK)
@@ -269,9 +272,5 @@ class FreezerModel(val service: FreezerService) {
                 isLoadingImg = false
             }
         }
-    }
-
-    fun getScreenWidth(): Int {
-        return Resources.getSystem().displayMetrics.densityDpi
     }
 }

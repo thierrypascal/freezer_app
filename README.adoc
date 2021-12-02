@@ -4,6 +4,10 @@
 
 * Thierry Odermatt
 
+=== Anmerkung
+
+Dem AndroidManifest wurde zusätzlich folgende Regel hinzugefügt: android:configChanges="orientation|screenSize". Ohne dieser Regel kann die Bildschirm Orientierung nicht sinnvoll verwendet werden.
+
 === Abgabe
 
 * _Klasse 5iCa_, Montag, 6.12.2021, 8:00 Uhr
