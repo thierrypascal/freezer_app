@@ -321,7 +321,6 @@ private fun ListTile(model: FreezerModel, element: Any, type: Int) {
                                 modifier = Modifier
                                     .width(getScreenWidth().dp - 150.dp)
                                     .clickable(onClick = {
-                                        /*TODO: show more info about radio with show tracklist*/
                                         getClickedRadioAsync(radio.id)
                                         currentScreen = Screen.RADIODETAIL
                                     })
@@ -367,7 +366,5 @@ private fun ListTile(model: FreezerModel, element: Any, type: Int) {
 
 @Composable
 private fun BottomBar(model: FreezerModel) {
-    with(model) {
-        StandardAppBottomBar(model)
-    }
+    StandardAppBottomBar(model)
 }
