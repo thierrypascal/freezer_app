@@ -16,7 +16,7 @@ object FreezerApp : EmobaApp {
         model = FreezerModel(service)
 
         //TODO: remove; Only for testing
-        model.searchString = "i need a dollar"
+        model.searchString = "eminem"
         model.getSearchAsync()
     }
 

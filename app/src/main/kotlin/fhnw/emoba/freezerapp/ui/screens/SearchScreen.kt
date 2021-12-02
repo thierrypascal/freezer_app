@@ -5,13 +5,18 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.QueueMusic
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import fhnw.emoba.freezerapp.data.classes.Album
 import fhnw.emoba.freezerapp.data.classes.Artist
@@ -37,11 +42,30 @@ fun SearchScreen(model: FreezerModel) {
 
 @Composable
 private fun TopBar(model: FreezerModel) {
+    val focusManager = LocalFocusManager.current
     with(model) {
         TopAppBar(
             title = { Text(text = "" /*TODO: add golden circle*/) },
             navigationIcon = { BackIcon(model) },
-            actions = { SearchIcon(model) /*TODO: SearchField instead of only icon*/ },
+            actions = {
+                TextField(
+                    value = searchString,
+                    onValueChange = { searchString = it },
+                    label = { Text("Suchen") },
+                    singleLine = true,
+                    keyboardActions = KeyboardActions(onDone = {
+                        getSearchAsync()
+                        focusManager.clearFocus()
+                    }),
+                    trailingIcon = { Icon(Icons.Filled.Search, "Suchen") },
+                    shape = RoundedCornerShape(8.dp),
+                    colors = TextFieldDefaults.textFieldColors(
+                        backgroundColor = MaterialTheme.colors.background,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        textColor = MaterialTheme.colors.primary,
+                    ),
+                )
+            },
             backgroundColor = MaterialTheme.colors.background,
             contentColor = MaterialTheme.colors.secondary,
             elevation = 0.dp,
@@ -142,7 +166,7 @@ private fun Body(model: FreezerModel) {
                     }
                 }
             }
-        })
+        }, modifier = Modifier.padding(bottom = 60.dp))
     }
 }
 
@@ -161,10 +185,15 @@ private fun ListTile(model: FreezerModel, element: Any, type: Int) {
                                 style = MaterialTheme.typography.h5,
                                 modifier = Modifier.width(40.dp)
                             )
-                            Column(content = {
-                                SingleLineTextBold(text = track.title)
-                                SingleLineTextLight(text = track.artist.name)
-                            }, modifier = Modifier.width(getScreenWidth().dp - 150.dp).clickable(onClick = {/*TODO: play track*/}))
+                            Column(
+                                content = {
+                                    SingleLineTextBold(text = track.title)
+                                    SingleLineTextLight(text = track.artist.name)
+                                },
+                                modifier = Modifier
+                                    .width(getScreenWidth().dp - 150.dp)
+                                    .clickable(onClick = {/*TODO: play track*/ })
+                            )
                         })
                         IconButton(onClick = { /*TODO: open Popup with option: add to playlist, add to favoriteTracks, show more Info*/ }) {
                             Icon(Icons.Filled.MoreVert, "Optionen")
@@ -186,10 +215,15 @@ private fun ListTile(model: FreezerModel, element: Any, type: Int) {
                                 style = MaterialTheme.typography.h5,
                                 modifier = Modifier.width(40.dp)
                             )
-                            Column(content = {
-                                SingleLineTextBold(text = artist.name)
-                                SingleLineTextLight(text = "${0/*TODO: artist.tracklist.size()*/} Songs")
-                            }, modifier = Modifier.width(getScreenWidth().dp - 150.dp).clickable(onClick = {/*TODO: show more info about artist with show tracklist*/}))
+                            Column(
+                                content = {
+                                    SingleLineTextBold(text = artist.name)
+                                    SingleLineTextLight(text = "${0/*TODO: artist.tracklist.size()*/} Songs")
+                                },
+                                modifier = Modifier
+                                    .width(getScreenWidth().dp - 150.dp)
+                                    .clickable(onClick = {/*TODO: show more info about artist with show tracklist*/ })
+                            )
                         })
                         IconButton(onClick = { /*TODO: open Popup with option: add tracklist to playlist, add to tracklist favoriteTracks, show more Info*/ }) {
                             Icon(Icons.Filled.MoreVert, "Optionen")
@@ -211,10 +245,15 @@ private fun ListTile(model: FreezerModel, element: Any, type: Int) {
                                 style = MaterialTheme.typography.h5,
                                 modifier = Modifier.width(40.dp)
                             )
-                            Column(content = {
-                                SingleLineTextBold(text = album.title)
-                                SingleLineTextLight(text = "${0/*TODO: album.tracklist.size()*/} Songs")
-                            }, modifier = Modifier.width(getScreenWidth().dp - 150.dp).clickable(onClick = {/*TODO: show more info about album and artist with show tracklist*/}))
+                            Column(
+                                content = {
+                                    SingleLineTextBold(text = album.title)
+                                    SingleLineTextLight(text = "${0/*TODO: album.tracklist.size()*/} Songs")
+                                },
+                                modifier = Modifier
+                                    .width(getScreenWidth().dp - 150.dp)
+                                    .clickable(onClick = {/*TODO: show more info about album and artist with show tracklist*/ })
+                            )
                         })
                         IconButton(onClick = { /*TODO: open Popup with option: add tracklist to playlist, add to tracklist favoriteTracks, show more Info*/ }) {
                             Icon(Icons.Filled.MoreVert, "Optionen")
@@ -236,10 +275,15 @@ private fun ListTile(model: FreezerModel, element: Any, type: Int) {
                                 style = MaterialTheme.typography.h5,
                                 modifier = Modifier.width(40.dp)
                             )
-                            Column(content = {
-                                SingleLineTextBold(text = radio.title)
-                                SingleLineTextLight(text = "${0/*TODO: radio.tracklist.size()*/} Songs")
-                            }, modifier = Modifier.width(getScreenWidth().dp - 150.dp).clickable(onClick = {/*TODO: show more info about radio with show tracklist*/}))
+                            Column(
+                                content = {
+                                    SingleLineTextBold(text = radio.title)
+                                    SingleLineTextLight(text = "${0/*TODO: radio.tracklist.size()*/} Songs")
+                                },
+                                modifier = Modifier
+                                    .width(getScreenWidth().dp - 150.dp)
+                                    .clickable(onClick = {/*TODO: show more info about radio with show tracklist*/ })
+                            )
                         })
                         IconButton(onClick = { /*TODO: open Popup with option: add tracklist to playlist, add to tracklist favoriteTracks, show more Info*/ }) {
                             Icon(Icons.Filled.MoreVert, "Optionen")
