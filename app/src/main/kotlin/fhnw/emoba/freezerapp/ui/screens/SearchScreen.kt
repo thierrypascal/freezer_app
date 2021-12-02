@@ -99,7 +99,7 @@ private fun Body(model: FreezerModel) {
                                 .padding(horizontal = 8.dp)
                                 .fillMaxSize()
                         ) {
-                            items(tracksFound) { ListTile(model, it, 0) }
+                            items(tracksFound) { TrackListTile(model, it) }
                         }
                     } else {
                         Box(
@@ -185,73 +185,11 @@ private fun Body(model: FreezerModel) {
 private fun ListTile(model: FreezerModel, element: Any, type: Int) {
     with(model) {
         var expanded by remember { mutableStateOf(false) }
+        val items = listOf("Songs zu Merkliste", "Songs zu Warteliste")
+
         when (type) {
-            0 -> {
-                val track = element as Track
-                val items = listOf("Details", "Zu Merkliste", "Zu Warteliste")
-                Row(
-                    content = {
-                        Row(content = {
-                            Text(
-                                text = track.title.filterNot { it.isWhitespace() }
-                                    .substring(startIndex = 0, endIndex = 2),
-                                style = MaterialTheme.typography.h5,
-                                modifier = Modifier.width(40.dp)
-                            )
-                            Column(
-                                content = {
-                                    SingleLineTextBold(text = track.title)
-                                    SingleLineTextLight(text = track.artist.name)
-                                },
-                                modifier = Modifier
-                                    .width(getScreenWidth().dp - 150.dp)
-                                    .clickable(onClick = {
-                                        getClickedTrackAsync(track.id, true)
-                                        currentScreen = Screen.PLAYER
-                                    })
-                            )
-                        })
-                        IconButton(onClick = {
-                            expanded = true
-                        }) {
-                            Icon(Icons.Filled.MoreVert, "Optionen")
-                        }
-                        DropdownMenu(
-                            expanded = expanded,
-                            onDismissRequest = { expanded = false },
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            items.forEachIndexed { index, s ->
-                                DropdownMenuItem(onClick = {
-                                    expanded = false
-                                    //TODO: show snackbar?
-                                    when (index) {
-                                        0 -> {
-                                            //TODO: request and redirect to detailPage
-                                        }
-                                        1 -> {
-                                            if (!favoriteTracks.contains(track)){
-                                                favoriteTracks = favoriteTracks + track
-                                            }
-                                        }
-                                        2 -> {
-                                            playlist = playlist + track
-                                        }
-                                    }
-                                }) {
-                                    Text(s)
-                                }
-                            }
-                        }
-                    },
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                )
-            }
             1 -> {
                 val artist = element as Artist
-                val items = listOf("Details", "Songs zu Merkliste", "Songs zu Warteliste")
                 Row(
                     content = {
                         Row(content = {
@@ -264,7 +202,7 @@ private fun ListTile(model: FreezerModel, element: Any, type: Int) {
                             Column(
                                 content = {
                                     SingleLineTextBold(text = artist.name)
-                                    SingleLineTextLight(text = "${0/*TODO: artist.tracklist.size()*/} Songs")
+                                    Text("")
                                 },
                                 modifier = Modifier
                                     .width(getScreenWidth().dp - 150.dp)
@@ -290,12 +228,9 @@ private fun ListTile(model: FreezerModel, element: Any, type: Int) {
                                     //TODO: show snackbar?
                                     when (index) {
                                         0 -> {
-                                            //TODO: request and redirect to detailPage
-                                        }
-                                        1 -> {
                                             //TODO: favoriteTracks = favoriteTracks + artist.tracklist
                                         }
-                                        2 -> {
+                                        1 -> {
                                             //TODO: playlist = playlist + artist.tracklist
                                         }
                                     }
@@ -312,7 +247,6 @@ private fun ListTile(model: FreezerModel, element: Any, type: Int) {
             }
             2 -> {
                 val album = element as Album
-                val items = listOf("Details", "Songs zu Merkliste", "Songs zu Warteliste")
                 Row(
                     content = {
                         Row(content = {
@@ -325,7 +259,7 @@ private fun ListTile(model: FreezerModel, element: Any, type: Int) {
                             Column(
                                 content = {
                                     SingleLineTextBold(text = album.title)
-                                    SingleLineTextLight(text = "${0/*TODO: album.tracklist.size()*/} Songs")
+                                    Text("")
                                 },
                                 modifier = Modifier
                                     .width(getScreenWidth().dp - 150.dp)
@@ -351,12 +285,9 @@ private fun ListTile(model: FreezerModel, element: Any, type: Int) {
                                     //TODO: show snackbar?
                                     when (index) {
                                         0 -> {
-                                            //TODO: request and redirect to detailPage
-                                        }
-                                        1 -> {
                                             //TODO: favoriteTracks = favoriteTracks + album.tracklist
                                         }
-                                        2 -> {
+                                        1 -> {
                                             //TODO: playlist = playlist + album.tracklist
                                         }
                                     }
@@ -373,7 +304,6 @@ private fun ListTile(model: FreezerModel, element: Any, type: Int) {
             }
             3 -> {
                 val radio = element as Radio
-                val items = listOf("Details", "Songs zu Merkliste", "Songs zu Warteliste")
                 Row(
                     content = {
                         Row(content = {
@@ -386,11 +316,15 @@ private fun ListTile(model: FreezerModel, element: Any, type: Int) {
                             Column(
                                 content = {
                                     SingleLineTextBold(text = radio.title)
-                                    SingleLineTextLight(text = "${0/*TODO: radio.tracklist.size()*/} Songs")
+                                    Text("")
                                 },
                                 modifier = Modifier
                                     .width(getScreenWidth().dp - 150.dp)
-                                    .clickable(onClick = {/*TODO: show more info about radio with show tracklist*/ })
+                                    .clickable(onClick = {
+                                        /*TODO: show more info about radio with show tracklist*/
+                                        getClickedRadioAsync(radio.id)
+                                        currentScreen = Screen.RADIODETAIL
+                                    })
                             )
                         })
                         IconButton(onClick = {
@@ -409,12 +343,9 @@ private fun ListTile(model: FreezerModel, element: Any, type: Int) {
                                     //TODO: show snackbar?
                                     when (index) {
                                         0 -> {
-                                            //TODO: request and redirect to detailPage
-                                        }
-                                        1 -> {
                                             //TODO: favoriteTracks = favoriteTracks + radio.tracklist
                                         }
-                                        2 -> {
+                                        1 -> {
                                             //TODO: playlist = playlist + radio.tracklist
                                         }
                                     }

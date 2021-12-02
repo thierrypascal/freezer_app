@@ -8,7 +8,6 @@ enum class Screen {
     PLAYLIST,
     PLAYER,
     SEARCH,
-    TRACKDETAIL,
     ARTISTDETAIL,
     ALBUMDETAIL,
     RADIODETAIL,

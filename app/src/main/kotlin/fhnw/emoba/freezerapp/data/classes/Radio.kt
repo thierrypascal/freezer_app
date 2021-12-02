@@ -20,7 +20,7 @@ data class Radio(
 
         share =             try {URL(jsonObject.getString("share"))}    catch (e: Exception) {URL("https://google.com/doesntexist")},
 
-        tracklist =     jsonObject.getString("tracklist"),
+        tracklist =         jsonObject.getString("tracklist"),
     )
 
     constructor() : this(

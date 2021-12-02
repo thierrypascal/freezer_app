@@ -72,7 +72,7 @@ private fun Body(model: FreezerModel) {
 @Composable
 private fun ListTile(model: FreezerModel, track: Track) {
     var expanded by remember { mutableStateOf(false) }
-    val items = listOf("Details", "Aus Liste löschen")
+    val items = listOf("Aus Liste löschen")
     with(model) {
         Row(
             content = {
@@ -112,9 +112,6 @@ private fun ListTile(model: FreezerModel, track: Track) {
                             //TODO: show snackbar?
                             when (index) {
                                 0 -> {
-                                    //TODO: request and redirect to detailPage
-                                }
-                                1 -> {
                                     favoriteTracks = favoriteTracks - track
                                 }
                             }

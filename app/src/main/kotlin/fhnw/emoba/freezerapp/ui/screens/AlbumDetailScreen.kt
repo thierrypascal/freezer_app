@@ -50,7 +50,7 @@ private fun Body(model: FreezerModel) {
             content = {
                 Row(content = {
                     Column(content = {
-                        SingleLineTextBold(clickedAlbum.title)
+                        TextBold(clickedAlbum.title)
                         Text("${clickedAlbum.nb_tracks} Lieder")
                         Text("${clickedAlbum.fans} Fans")
                         Text(clickedAlbum.label)
@@ -87,21 +87,12 @@ private fun Body(model: FreezerModel) {
                             .weight(2f)
                     )
                 })
-                BasicRow(
-                    content = {
-                        SingleLineTextBold("Lieder dieses Albums", 18.sp)
-                        IconButton(onClick = {
-                            /*TODO: redirect to TracklistScreen*/
-                        }) {
-                            Icon(Icons.Filled.ArrowForwardIos, "Lieder dieses Albums")
-                        }
-                    },
-                )
+                SingleLineTextBold("Lieder dieses Albums", 18.sp)
                 if (clickedAlbumTracklist.isNotEmpty()) {
                     LazyColumn(
                         state = state,
                     ) {
-                        items(clickedAlbumTracklist) { ListTile(model, it) }
+                        items(clickedAlbumTracklist) { TrackListTile(model, it) }
                     }
                 } else {
                     Box(
@@ -118,74 +109,6 @@ private fun Body(model: FreezerModel) {
                 .padding(bottom = 60.dp)
                 .fillMaxSize()
         )
-    }
-}
-
-@Composable
-private fun ListTile(model: FreezerModel, track: Track) {
-    var expanded by remember { mutableStateOf(false) }
-    val items = listOf("Details", "Zu Merkliste", "Zu Warteliste")
-    with(model) {
-        Row(
-            content = {
-                Row(content = {
-                    Text(
-                        text = track.title.filterNot { it.isWhitespace() }
-                            .substring(startIndex = 0, endIndex = 2),
-                        style = MaterialTheme.typography.h5,
-                        modifier = Modifier.width(40.dp)
-                    )
-                    Column(
-                        content = {
-                            SingleLineTextBold(text = track.title)
-                            SingleLineTextLight(text = track.artist.name)
-                        },
-                        modifier = Modifier
-                            .width(getScreenWidth().dp - 150.dp)
-                            .clickable(onClick = {
-                                getClickedTrackAsync(track.id, true)
-                                currentScreen = Screen.PLAYER
-                            })
-                    )
-                })
-                IconButton(onClick = {
-                    expanded = true
-                }) {
-                    Icon(Icons.Filled.MoreVert, "Optionen")
-                }
-                DropdownMenu(
-                    expanded = expanded,
-                    onDismissRequest = { expanded = false },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    items.forEachIndexed { index, s ->
-                        DropdownMenuItem(onClick = {
-                            expanded = false
-                            //TODO: show snackbar?
-                            when (index) {
-                                0 -> {
-                                    //TODO: request and redirect to detailPage
-                                }
-                                1 -> {
-                                    if (!favoriteTracks.contains(track)) {
-                                        favoriteTracks = favoriteTracks + track
-                                    }
-                                }
-                                2 -> {
-                                    playlist = playlist + track
-                                }
-                            }
-                        }) {
-                            Text(s)
-                        }
-                    }
-                }
-            },
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        )
-        Divider()
     }
 }
 
