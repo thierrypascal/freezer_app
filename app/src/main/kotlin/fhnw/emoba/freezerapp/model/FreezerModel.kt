@@ -22,7 +22,7 @@ class FreezerModel(val service: FreezerService) {
     val subtitle = "exclusive version"
     var searchString by mutableStateOf("")
 
-    //TODO: add playlist (current playing + to be played)
+    var playlist: List<Track> by mutableStateOf(emptyList())
     var lastPlayed: List<Track> by mutableStateOf(emptyList())
     var favoriteTracks: List<Track> by mutableStateOf(emptyList())
     var searchResult: List<Track> by mutableStateOf(emptyList())

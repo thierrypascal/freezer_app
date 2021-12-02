@@ -12,7 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.QueueMusic
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -173,9 +173,11 @@ private fun Body(model: FreezerModel) {
 @Composable
 private fun ListTile(model: FreezerModel, element: Any, type: Int) {
     with(model) {
+        var expanded by remember { mutableStateOf(false) }
         when (type) {
             0 -> {
                 val track = element as Track
+                val items = listOf("Details", "Zu Merkliste", "Zu Warteliste")
                 Row(
                     content = {
                         Row(content = {
@@ -192,11 +194,40 @@ private fun ListTile(model: FreezerModel, element: Any, type: Int) {
                                 },
                                 modifier = Modifier
                                     .width(getScreenWidth().dp - 150.dp)
-                                    .clickable(onClick = {/*TODO: play track*/ })
+                                    .clickable(onClick = {
+                                        /*TODO: play track*/
+                                    })
                             )
                         })
-                        IconButton(onClick = { /*TODO: open Popup with option: add to playlist, add to favoriteTracks, show more Info*/ }) {
+                        IconButton(onClick = {
+                            expanded = true
+                        }) {
                             Icon(Icons.Filled.MoreVert, "Optionen")
+                        }
+                        DropdownMenu(
+                            expanded = expanded,
+                            onDismissRequest = { expanded = false },
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            items.forEachIndexed { index, s ->
+                                DropdownMenuItem(onClick = {
+                                    expanded = false
+                                    //TODO: show snackbar?
+                                    when (index) {
+                                        0 -> {
+                                            //TODO: request and redirect to detailPage
+                                        }
+                                        1 -> {
+                                            favoriteTracks = favoriteTracks + track
+                                        }
+                                        2 -> {
+                                            playlist = playlist + track
+                                        }
+                                    }
+                                }) {
+                                    Text(s)
+                                }
+                            }
                         }
                     },
                     verticalAlignment = Alignment.CenterVertically,
@@ -206,6 +237,7 @@ private fun ListTile(model: FreezerModel, element: Any, type: Int) {
             }
             1 -> {
                 val artist = element as Artist
+                val items = listOf("Details", "Songs zu Merkliste", "Songs zu Warteliste")
                 Row(
                     content = {
                         Row(content = {
@@ -225,8 +257,35 @@ private fun ListTile(model: FreezerModel, element: Any, type: Int) {
                                     .clickable(onClick = {/*TODO: show more info about artist with show tracklist*/ })
                             )
                         })
-                        IconButton(onClick = { /*TODO: open Popup with option: add tracklist to playlist, add to tracklist favoriteTracks, show more Info*/ }) {
+                        IconButton(onClick = {
+                            expanded = true
+                        }) {
                             Icon(Icons.Filled.MoreVert, "Optionen")
+                        }
+                        DropdownMenu(
+                            expanded = expanded,
+                            onDismissRequest = { expanded = false },
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            items.forEachIndexed { index, s ->
+                                DropdownMenuItem(onClick = {
+                                    expanded = false
+                                    //TODO: show snackbar?
+                                    when (index) {
+                                        0 -> {
+                                            //TODO: request and redirect to detailPage
+                                        }
+                                        1 -> {
+                                            //TODO: favoriteTracks = favoriteTracks + artist.tracklist
+                                        }
+                                        2 -> {
+                                            //TODO: playlist = playlist + artist.tracklist
+                                        }
+                                    }
+                                }) {
+                                    Text(s)
+                                }
+                            }
                         }
                     },
                     verticalAlignment = Alignment.CenterVertically,
@@ -236,6 +295,7 @@ private fun ListTile(model: FreezerModel, element: Any, type: Int) {
             }
             2 -> {
                 val album = element as Album
+                val items = listOf("Details", "Songs zu Merkliste", "Songs zu Warteliste")
                 Row(
                     content = {
                         Row(content = {
@@ -255,8 +315,35 @@ private fun ListTile(model: FreezerModel, element: Any, type: Int) {
                                     .clickable(onClick = {/*TODO: show more info about album and artist with show tracklist*/ })
                             )
                         })
-                        IconButton(onClick = { /*TODO: open Popup with option: add tracklist to playlist, add to tracklist favoriteTracks, show more Info*/ }) {
+                        IconButton(onClick = {
+                            expanded = true
+                        }) {
                             Icon(Icons.Filled.MoreVert, "Optionen")
+                        }
+                        DropdownMenu(
+                            expanded = expanded,
+                            onDismissRequest = { expanded = false },
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            items.forEachIndexed { index, s ->
+                                DropdownMenuItem(onClick = {
+                                    expanded = false
+                                    //TODO: show snackbar?
+                                    when (index) {
+                                        0 -> {
+                                            //TODO: request and redirect to detailPage
+                                        }
+                                        1 -> {
+                                            //TODO: favoriteTracks = favoriteTracks + album.tracklist
+                                        }
+                                        2 -> {
+                                            //TODO: playlist = playlist + album.tracklist
+                                        }
+                                    }
+                                }) {
+                                    Text(s)
+                                }
+                            }
                         }
                     },
                     verticalAlignment = Alignment.CenterVertically,
@@ -266,6 +353,7 @@ private fun ListTile(model: FreezerModel, element: Any, type: Int) {
             }
             3 -> {
                 val radio = element as Radio
+                val items = listOf("Details", "Songs zu Merkliste", "Songs zu Warteliste")
                 Row(
                     content = {
                         Row(content = {
@@ -285,8 +373,35 @@ private fun ListTile(model: FreezerModel, element: Any, type: Int) {
                                     .clickable(onClick = {/*TODO: show more info about radio with show tracklist*/ })
                             )
                         })
-                        IconButton(onClick = { /*TODO: open Popup with option: add tracklist to playlist, add to tracklist favoriteTracks, show more Info*/ }) {
+                        IconButton(onClick = {
+                            expanded = true
+                        }) {
                             Icon(Icons.Filled.MoreVert, "Optionen")
+                        }
+                        DropdownMenu(
+                            expanded = expanded,
+                            onDismissRequest = { expanded = false },
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            items.forEachIndexed { index, s ->
+                                DropdownMenuItem(onClick = {
+                                    expanded = false
+                                    //TODO: show snackbar?
+                                    when (index) {
+                                        0 -> {
+                                            //TODO: request and redirect to detailPage
+                                        }
+                                        1 -> {
+                                            //TODO: favoriteTracks = favoriteTracks + radio.tracklist
+                                        }
+                                        2 -> {
+                                            //TODO: playlist = playlist + radio.tracklist
+                                        }
+                                    }
+                                }) {
+                                    Text(s)
+                                }
+                            }
                         }
                     },
                     verticalAlignment = Alignment.CenterVertically,
