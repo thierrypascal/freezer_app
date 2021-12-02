@@ -87,10 +87,9 @@ private fun Body(model: FreezerModel) {
                 })
                 BasicRow(
                     content = {
-                        SingleLineTextBold("Lieder", 18.sp)
+                        SingleLineTextBold("Lieder dieses Künstlers", 18.sp)
                         IconButton(onClick = {
                             /*TODO: redirect to TracklistScreen*/
-                            println("--------" + clickedArtistTracklist.size + "----------")
                         }) {
                             Icon(Icons.Filled.ArrowForwardIos, "Lieder dieses Künstlers")
                         }
@@ -114,6 +113,7 @@ private fun Body(model: FreezerModel) {
                 }
             }, modifier = Modifier
                 .padding(horizontal = 8.dp)
+                .padding(bottom = 60.dp)
                 .fillMaxSize()
         )
     }

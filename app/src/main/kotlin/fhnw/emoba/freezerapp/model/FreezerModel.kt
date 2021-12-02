@@ -183,7 +183,7 @@ class FreezerModel(val service: FreezerService) {
         clickedAlbumTracklist = emptyList()
         modelScope.launch {
             clickedAlbum = service.requestAlbum(searchFilter)
-            clickedAlbumTracklist = service.requestTracklist(clickedAlbum.tracklist)
+            clickedAlbumTracklist = service.requestAlbumTracklist(clickedAlbum.tracklist, clickedAlbum)
             isLoading = false
 
             getClickedAlbumCoverAsync()

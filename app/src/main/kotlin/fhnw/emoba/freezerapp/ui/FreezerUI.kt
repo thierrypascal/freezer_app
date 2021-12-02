@@ -36,7 +36,9 @@ fun FreezerUI(model: FreezerModel) {
                     Screen.ARTISTDETAIL -> {
                         ArtistDetailScreen(model = model)
                     }
-                    Screen.ALBUMDETAIL -> TODO()
+                    Screen.ALBUMDETAIL -> {
+                        AlbumDetailScreen(model = model)
+                    }
                     Screen.RADIODETAIL -> TODO()
                 }
             }

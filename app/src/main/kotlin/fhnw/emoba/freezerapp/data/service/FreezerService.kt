@@ -66,6 +66,21 @@ class FreezerService {
         }
     }
 
+    fun requestAlbumTracklist(url: String, album: Album): List<Track>{
+        try {
+            val data = JSONObject(content(url))
+            val trackData = data.getJSONArray("data")
+            val list: MutableList<Track> = mutableListOf()
+            for (i in 0 until trackData.length()) {
+                list.add(Track(trackData.getJSONObject(i), album))
+            }
+            return list
+        }catch (e: Exception){
+            println("$url: $e")
+            return emptyList()
+        }
+    }
+
     fun requestArtist(searchFilter: Int): Artist{
         val url = "$baseURL$appendArtistUrl$searchFilter"
         try {
