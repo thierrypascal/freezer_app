@@ -75,6 +75,7 @@ private fun TopBar(model: FreezerModel) {
 
 @Composable
 private fun Body(model: FreezerModel) {
+    val state = rememberLazyListState()
     with(model) {
         Column(content = {
             TabRow(selectedTabIndex = currentTab.ordinal) {
@@ -88,14 +89,13 @@ private fun Body(model: FreezerModel) {
                     )
                 }
             }
-            //TODO: list with type of list given by tabs.type -> switch for correct model.list
-            val state = rememberLazyListState()
             //TODO: what happens when scrolled to the end of the list? loading next page of request?
             when (currentTab.type) {
                 0 -> {
                     if (tracksFound.isNotEmpty()) {
                         LazyColumn(
                             state = state,
+                            modifier = Modifier.padding(horizontal = 8.dp).fillMaxSize()
                         ) {
                             items(tracksFound) { ListTile(model, it, 0) }
                         }
@@ -114,6 +114,7 @@ private fun Body(model: FreezerModel) {
                     if (artistsFound.isNotEmpty()) {
                         LazyColumn(
                             state = state,
+                            modifier = Modifier.padding(horizontal = 8.dp).fillMaxSize()
                         ) {
                             items(artistsFound) { ListTile(model, it, 1) }
                         }
@@ -132,6 +133,7 @@ private fun Body(model: FreezerModel) {
                     if (albumsFound.isNotEmpty()) {
                         LazyColumn(
                             state = state,
+                            modifier = Modifier.padding(horizontal = 8.dp).fillMaxSize()
                         ) {
                             items(albumsFound) { ListTile(model, it, 2) }
                         }
@@ -150,6 +152,7 @@ private fun Body(model: FreezerModel) {
                     if (radiosFound.isNotEmpty()) {
                         LazyColumn(
                             state = state,
+                            modifier = Modifier.padding(horizontal = 8.dp).fillMaxSize()
                         ) {
                             items(radiosFound) { ListTile(model, it, 3) }
                         }
@@ -417,16 +420,6 @@ private fun ListTile(model: FreezerModel, element: Any, type: Int) {
 @Composable
 private fun BottomBar(model: FreezerModel) {
     with(model) {
-        BottomAppBar(
-            content = {
-                IconButton(onClick = { /*TODO: open lastPlayedScreen*/ }) {
-                    Icon(Icons.Filled.QueueMusic, "Zuletzt gespielt")
-                }
-                //TODO: add miniplayer of currentlyPlaying
-            },
-            backgroundColor = MaterialTheme.colors.background,
-            contentColor = MaterialTheme.colors.secondary,
-            elevation = 0.dp,
-        )
+        StandardAppBottomBar(model)
     }
 }

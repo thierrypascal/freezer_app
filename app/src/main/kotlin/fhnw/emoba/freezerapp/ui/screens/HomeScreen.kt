@@ -60,7 +60,7 @@ private fun Body(model: FreezerModel) {
                     BasicRow(
                         content = {
                             Text("Zuletzt gespielt", fontWeight = FontWeight.Bold)
-                            IconButton(onClick = { /*TODO: open LastPlayedScreen*/ }) {
+                            IconButton(onClick = { currentScreen = Screen.LASTPLAYED }) {
                                 Icon(Icons.Filled.ArrowForwardIos, "Zuletzt gespielt")
                             }
                         },
@@ -72,7 +72,7 @@ private fun Body(model: FreezerModel) {
                     BasicRow(
                         content = {
                             Text("Merkliste", fontWeight = FontWeight.Bold)
-                            IconButton(onClick = { /*TODO: open favoriteTracksScreen*/ }) {
+                            IconButton(onClick = { currentScreen = Screen.FAVORITETRACKS }) {
                                 Icon(Icons.Filled.ArrowForwardIos, "Merkliste")
                             }
                         },
@@ -119,17 +119,7 @@ private fun Body(model: FreezerModel) {
 @Composable
 private fun BottomBar(model: FreezerModel) {
     with(model) {
-        BottomAppBar(
-            content = {
-                IconButton(onClick = { /*TODO: open lastPlayedScreen*/ }) {
-                    Icon(Icons.Filled.QueueMusic, "Zuletzt gespielt")
-                }
-                //TODO: add miniplayer of currentlyPlaying
-            },
-            backgroundColor = MaterialTheme.colors.background,
-            contentColor = MaterialTheme.colors.secondary,
-            elevation = 0.dp,
-        )
+        StandardAppBottomBar(model)
     }
 }
 

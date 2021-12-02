@@ -2,12 +2,10 @@ package fhnw.emoba.freezerapp.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIos
+import androidx.compose.material.icons.filled.QueueMusic
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -77,6 +75,33 @@ fun SingleLineText(text: String){
         softWrap = true,
         textAlign = TextAlign.Center,
         maxLines = 1,
+    )
+}
+
+@Composable
+fun StandardAppBottomBar(model: FreezerModel){
+    BottomAppBar(
+        content = {
+            IconButton(onClick = { model.currentScreen = Screen.PLAYLIST }) {
+                Icon(Icons.Filled.QueueMusic, "Playlist")
+            }
+            //TODO: add miniplayer of currentlyPlaying
+        },
+        backgroundColor = MaterialTheme.colors.background,
+        contentColor = MaterialTheme.colors.secondary,
+        elevation = 0.dp,
+    )
+}
+
+@Composable
+fun StandardTopAppBar(model: FreezerModel){
+    TopAppBar(
+        title = { Text(text = "" /*TODO: add golden circle*/) },
+        navigationIcon = { BackIcon(model) },
+        actions = { SearchIcon(model) },
+        backgroundColor = MaterialTheme.colors.background,
+        contentColor = MaterialTheme.colors.secondary,
+        elevation = 0.dp,
     )
 }
 

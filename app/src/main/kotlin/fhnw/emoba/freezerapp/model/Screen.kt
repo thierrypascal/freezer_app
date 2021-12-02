@@ -5,6 +5,11 @@ enum class Screen {
     HOME,
     FAVORITETRACKS,
     LASTPLAYED,
+    PLAYLIST,
     PLAYER,
     SEARCH,
+    TRACKDETAIL,
+    ARTISTDETAIL,
+    ALBUMDETAIL,
+    RADIODETAIL,
 }

@@ -4,8 +4,7 @@ import androidx.compose.animation.Crossfade
 import androidx.compose.runtime.Composable
 import fhnw.emoba.freezerapp.model.FreezerModel
 import fhnw.emoba.freezerapp.model.Screen
-import fhnw.emoba.freezerapp.ui.screens.HomeScreen
-import fhnw.emoba.freezerapp.ui.screens.SearchScreen
+import fhnw.emoba.freezerapp.ui.screens.*
 import fhnw.emoba.freezerapp.ui.theme.FreezerAppTheme
 
 
@@ -18,12 +17,23 @@ fun FreezerUI(model: FreezerModel) {
                     Screen.HOME -> {
                         HomeScreen(model = model)
                     }
-                    Screen.FAVORITETRACKS -> TODO()
-                    Screen.LASTPLAYED -> TODO()
+                    Screen.FAVORITETRACKS -> {
+                        FavoriteTracksScreen(model = model)
+                    }
+                    Screen.LASTPLAYED -> {
+                        LastPlayedScreen(model = model)
+                    }
                     Screen.PLAYER -> TODO()
                     Screen.SEARCH -> {
                         SearchScreen(model = model)
                     }
+                    Screen.PLAYLIST -> {
+                        PlaylistScreen(model = model)
+                    }
+                    Screen.TRACKDETAIL -> TODO()
+                    Screen.ARTISTDETAIL -> TODO()
+                    Screen.ALBUMDETAIL -> TODO()
+                    Screen.RADIODETAIL -> TODO()
                 }
             }
         }

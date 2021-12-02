@@ -18,7 +18,7 @@ import fhnw.emoba.freezerapp.data.classes.Track
 import fhnw.emoba.freezerapp.model.FreezerModel
 
 @Composable
-fun PlaylistScreen(model: FreezerModel) {
+fun LastPlayedScreen(model: FreezerModel) {
     val scaffoldState = rememberScaffoldState()
 
     with(model) {
@@ -34,7 +34,9 @@ fun PlaylistScreen(model: FreezerModel) {
 
 @Composable
 private fun TopBar(model: FreezerModel) {
-    StandardAppBottomBar(model)
+    with(model) {
+        StandardAppBottomBar(model)
+    }
 }
 
 @Composable
@@ -42,13 +44,13 @@ private fun Body(model: FreezerModel) {
     val state = rememberLazyListState()
     with(model) {
         Column(content = {
-            Text("Warteschlange", fontWeight = FontWeight.Bold)
+            Text("Zuletzt gespielt", fontWeight = FontWeight.Bold)
             Column(content = {
-                if (playlist.isNotEmpty()) {
+                if (lastPlayed.isNotEmpty()) {
                     LazyColumn(
                         state = state,
                     ) {
-                        items(playlist) { ListTile(model, it) }
+                        items(lastPlayed) { ListTile(model, it) }
                     }
                 } else {
                     Box(
@@ -110,7 +112,7 @@ private fun ListTile(model: FreezerModel, track: Track) {
                                     //TODO: request and redirect to detailPage
                                 }
                                 1 -> {
-                                    playlist = playlist - track
+                                    lastPlayed = lastPlayed - track
                                 }
                             }
                         }) {
