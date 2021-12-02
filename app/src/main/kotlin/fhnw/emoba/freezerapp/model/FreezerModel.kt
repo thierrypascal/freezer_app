@@ -35,7 +35,14 @@ class FreezerModel(val service: FreezerService) {
 
     var clickedTrack: Track by mutableStateOf(Track())
     var clickedArtist: Artist by mutableStateOf(Artist())
+    var clickedArtistPicture: ImageBitmap? by mutableStateOf(null)
+    var clickedArtistTracklist: List<Track> by mutableStateOf(emptyList())
     var clickedAlbum: Album by mutableStateOf(Album())
+    var clickedAlbumCover: ImageBitmap? by mutableStateOf(null)
+    var clickedAlbumTracklist: List<Track> by mutableStateOf(emptyList())
+    var clickedRadio: Radio by mutableStateOf(Radio())
+    var clickedRadioPicture: ImageBitmap? by mutableStateOf(null)
+    var clickedRadioTracklist: List<Track> by mutableStateOf(emptyList())
 
     var favoriteTracksCover: Map<Int, ImageBitmap?> = mutableMapOf()
     var lastPlayedCover: Map<Int, ImageBitmap?> = mutableMapOf()
@@ -142,8 +149,7 @@ class FreezerModel(val service: FreezerService) {
                 if (!lastPlayed.map { t -> t.id }.contains(currentlyPlaying.id)){
                     lastPlayed = lastPlayed + currentlyPlaying
                 }
-                //TODO: player.start()
-                getCurrentlyPlayingCover()
+                getCurrentlyPlayingCoverAsync()
             }
         }
     }
@@ -151,37 +157,87 @@ class FreezerModel(val service: FreezerService) {
     fun getClickedArtistAsync(searchFilter: Int) {
         isLoading = true
         clickedArtist = Artist()
+        clickedArtistTracklist = emptyList()
         modelScope.launch {
             clickedArtist = service.requestArtist(searchFilter)
+            clickedArtistTracklist = service.requestTracklist(clickedArtist.tracklist)
             isLoading = false
+
+            getClickedArtistPictureAsync()
+        }
+    }
+
+    fun getClickedArtistPictureAsync(){
+        if (clickedArtist != null && clickedArtist != Artist()){
+            isLoadingImg = true
+            modelScope.launch {
+                clickedArtistPicture = service.requestCover(clickedArtist.picture, "xl")
+                isLoadingImg = false
+            }
         }
     }
 
     fun getClickedAlbumAsync(searchFilter: Int) {
         isLoading = true
         clickedAlbum = Album()
+        clickedAlbumTracklist = emptyList()
         modelScope.launch {
             clickedAlbum = service.requestAlbum(searchFilter)
+            clickedAlbumTracklist = service.requestTracklist(clickedAlbum.tracklist)
             isLoading = false
+
+            getClickedAlbumCoverAsync()
+        }
+    }
+
+    fun getClickedAlbumCoverAsync(){
+        if (clickedAlbum != null && clickedAlbum != Album()){
+            isLoadingImg = true
+            modelScope.launch {
+                clickedAlbumCover = service.requestCover(clickedAlbum.cover, "xl")
+                isLoadingImg = false
+            }
+        }
+    }
+
+    fun getClickedRadioAsync(searchFilter: Int) {
+        isLoading = true
+        clickedRadio = Radio()
+        clickedRadioTracklist = emptyList()
+        modelScope.launch {
+            clickedRadio = service.requestRadioById(searchFilter)
+            clickedRadioTracklist = service.requestTracklist(clickedRadio.tracklist)
+            isLoading = false
+
+            getClickedRadioPictureAsync()
+        }
+    }
+
+    fun getClickedRadioPictureAsync(){
+        if (clickedRadio != null && clickedRadio != Radio()){
+            isLoadingImg = true
+            modelScope.launch {
+                clickedRadioPicture = service.requestCover(clickedRadio.picture, "xl")
+                isLoadingImg = false
+            }
         }
     }
 
     fun getRadiosAsync() {
-        //TODO: search radio?
         isLoading = true
         radiosFound = emptyList()
         modelScope.launch {
-            radiosFound = service.requestRadio()
+            radiosFound = service.requestRadio(searchString)
             radiosFound = radiosFound.sortedBy { radio -> radio.title }
             isLoading = false
         }
     }
 
-    fun getCurrentlyPlayingCover(){
+    fun getCurrentlyPlayingCoverAsync(){
         if (currentlyPlaying != null && currentlyPlaying != Track()){
             isLoadingImg = true
             modelScope.launch {
-                currentlyPlayingCover = service.requestCover(currentlyPlaying, "xl")
+                currentlyPlayingCover = service.requestCover(currentlyPlaying.album.cover, "xl")
                 isLoadingImg = false
             }
         }
@@ -193,7 +249,7 @@ class FreezerModel(val service: FreezerService) {
             modelScope.launch {
                 favoriteTracks.forEach{t ->
                     val coverMap: HashMap<Int, ImageBitmap?> = hashMapOf(
-                        t.id to service.requestCover(t, "big"),
+                        t.id to service.requestCover(t.album.cover, "big"),
                     )
                     favoriteTracksCover = favoriteTracksCover + coverMap
                 }
@@ -206,7 +262,7 @@ class FreezerModel(val service: FreezerService) {
             modelScope.launch {
                 lastPlayed.forEach{t ->
                     val coverMap: HashMap<Int, ImageBitmap?> = hashMapOf(
-                        t.id to service.requestCover(t, "big"),
+                        t.id to service.requestCover(t.album.cover, "big"),
                     )
                     lastPlayedCover = lastPlayedCover + coverMap
                 }

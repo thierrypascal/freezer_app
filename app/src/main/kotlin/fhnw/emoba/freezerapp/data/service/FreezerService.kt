@@ -12,11 +12,12 @@ import javax.net.ssl.HttpsURLConnection
 
 class FreezerService {
     private val baseURL = "https://api.deezer.com/"
-    private val appendRadioUrl = "radio/top"
+    private val appendRadioUrl = "search/radio?q="
     private val appendSearchUrl = "search?q="
     private val appendTrackUrl = "track/"
     private val appendAlbumUrl = "album/"
     private val appendArtistUrl = "artist/"
+    private val appendRadioByIdUrl = "radio/"
 
     fun requestSearch(searchFilter: String): List<Track>{
         val url = "$baseURL$appendSearchUrl$searchFilter"
@@ -50,6 +51,21 @@ class FreezerService {
         }
     }
 
+    fun requestTracklist(url: String): List<Track>{
+        try {
+            val data = JSONObject(content(url))
+            val trackData = data.getJSONArray("data")
+            val list: MutableList<Track> = mutableListOf()
+            for (i in 0 until trackData.length()) {
+                list.add(Track(trackData.getJSONObject(i)))
+            }
+            return list
+        }catch (e: Exception){
+            println("$url: $e")
+            return emptyList()
+        }
+    }
+
     fun requestArtist(searchFilter: Int): Artist{
         val url = "$baseURL$appendArtistUrl$searchFilter"
         try {
@@ -72,8 +88,8 @@ class FreezerService {
         }
     }
 
-    fun requestRadio(): List<Radio>{
-        val url = "$baseURL$appendRadioUrl"
+    fun requestRadio(searchFilter: String): List<Radio>{
+        val url = "$baseURL$appendRadioUrl$searchFilter"
         try {
             val data = JSONObject(content(url))
             val trackData = data.getJSONArray("data")
@@ -88,9 +104,20 @@ class FreezerService {
         }
     }
 
-    fun requestCover(track: Track, size: String): ImageBitmap? {
+    fun requestRadioById(searchFilter: Int): Radio{
+        val url = "$baseURL$appendRadioByIdUrl$searchFilter"
         try {
-            val url = URL("${track.album.cover}?size=${size}")
+            val data = JSONObject(content(url))
+            return Radio(data)
+        } catch (e: Exception) {
+            println("$url: $e")
+            return Radio()
+        }
+    }
+
+    fun requestCover(path: String, size: String): ImageBitmap? {
+        try {
+            val url = URL("${path}?size=${size}")
             val conn = url.openConnection() as HttpsURLConnection
             conn.connect()
 

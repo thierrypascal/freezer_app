@@ -7,30 +7,30 @@ import java.net.URL
 data class Radio(
     val id: Int,
     val title: String,
-    val picture: URL,
+    val picture: String,
 
     val share: URL,
 
-//    val tracklist: List<Track>
+    val tracklist: String
 ) {
     constructor(jsonObject: JSONObject) : this(
         id =                jsonObject.getInt("id"),
         title =             jsonObject.getString("title").trim(),
-        picture =           URL(jsonObject.getString("picture")), //TODO: to Picture/Bitmap?
+        picture =           jsonObject.getString("picture"),
 
         share =             try {URL(jsonObject.getString("share"))}    catch (e: Exception) {URL("https://google.com/doesntexist")},
 
-//        tracklist =     loadTracklistByUrl(URL(jsonObject.getString("tracklist"))) //TODO: load tracklist by url
+        tracklist =     jsonObject.getString("tracklist"),
     )
 
     constructor() : this(
         id =            0,
         title =         "",
-        picture =       URL("https://google.com/doesntexist"), //TODO: to Picture/Bitmap?, no_image handling
+        picture =       "https://google.com/doesntexist",
 
         share =         URL("https://google.com/doesntexist"),
 
-//        tracklist =     loadTracklistByUrl(URL(jsonObject.getString("tracklist"))) //TODO: load tracklist by url
+        tracklist =     "",
     )
 
     override fun toString(): String {

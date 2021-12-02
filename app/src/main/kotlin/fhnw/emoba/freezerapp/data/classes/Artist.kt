@@ -7,23 +7,35 @@ data class Artist (
     val id: Int,
     val name: String,
     val link: URL,
-    val picture: URL,
-//    val tracklist: List<Track>
+    val picture: String,
+
+    val nb_album: Int,
+    val nb_fan: Int,
+
+    val tracklist: String
 ) {
-        constructor(jsonObject: JSONObject) : this(
+    constructor(jsonObject: JSONObject) : this(
         id =            jsonObject.getInt("id"),
         name =          jsonObject.getString("name").trim(),
         link =          URL(jsonObject.getString("link")),
-        picture =       URL(jsonObject.getString("picture")), //TODO: to Picture/Bitmap?
-//        tracklist =     loadTracklistByUrl(URL(jsonObject.getString("tracklist"))) //TODO: load tracklist by url
-        )
+        picture =       jsonObject.getString("picture"),
+
+        nb_album =      jsonObject.getInt("nb_album"),
+        nb_fan =        jsonObject.getInt("nb_fan"),
+
+        tracklist =     jsonObject.getString("tracklist"),
+    )
 
     constructor() : this(
         id =            0,
         name =          "",
         link =          URL("https://google.com/doesntexist"),
-        picture =       URL("https://google.com/doesntexist"), //TODO: to Picture/Bitmap?, no_image handling
-//        tracklist =     loadTracklistByUrl(URL(jsonObject.getString("tracklist"))) //TODO: load tracklist by url
+        picture =       "https://google.com/doesntexist",
+
+        nb_album =      0,
+        nb_fan =        0,
+
+        tracklist =     "",
     )
 
 
