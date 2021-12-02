@@ -17,6 +17,8 @@ class FreezerModel(val service: FreezerService) {
 
     var currentScreen by mutableStateOf(Screen.HOME)
     var currentTab by mutableStateOf(Tabs.TRACK)
+    var currentlyPlaying by mutableStateOf(Track())
+    var currentlyPlayingCover: ImageBitmap? by mutableStateOf(null)
 
     val title = "Freezer"
     val subtitle = "exclusive version"
@@ -65,12 +67,20 @@ class FreezerModel(val service: FreezerService) {
         }
     }
 
-    fun getClickedTrackAsync(searchFilter: Int) {
+    fun getClickedTrackAsync(searchFilter: Int, shouldPlay: Boolean) {
         isLoading = true
         clickedTrack = Track()
         modelScope.launch {
             clickedTrack = service.requestTrack(searchFilter)
             isLoading = false
+            if (shouldPlay){
+                currentlyPlaying = clickedTrack
+                if (!lastPlayed.map { t -> t.id }.contains(currentlyPlaying.id)){
+                    lastPlayed = lastPlayed + currentlyPlaying
+                }
+                //TODO: player.start()
+                getCurrentlyPlayingCover()
+            }
         }
     }
 
@@ -100,6 +110,16 @@ class FreezerModel(val service: FreezerService) {
             radiosFound = service.requestRadio()
             radiosFound = radiosFound.sortedBy { radio -> radio.title }
             isLoading = false
+        }
+    }
+
+    fun getCurrentlyPlayingCover(){
+        if (currentlyPlaying != null && currentlyPlaying != Track()){
+            isLoadingImg = true
+            modelScope.launch {
+                currentlyPlayingCover = service.requestCover(currentlyPlaying, "xl")
+                isLoadingImg = false
+            }
         }
     }
 

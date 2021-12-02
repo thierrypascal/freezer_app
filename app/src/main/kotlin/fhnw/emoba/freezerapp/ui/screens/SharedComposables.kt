@@ -1,6 +1,7 @@
 package fhnw.emoba.freezerapp.ui.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
@@ -16,6 +17,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import fhnw.emoba.R
@@ -47,7 +49,7 @@ fun BasicRow(content: @Composable RowScope.() -> Unit) {
 }
 
 @Composable
-fun SingleLineTextBold(text: String) {
+fun SingleLineTextBold(text: String, fontSize: TextUnit = 16.sp) {
     Text(
         text,
         overflow = TextOverflow.Clip,
@@ -55,11 +57,12 @@ fun SingleLineTextBold(text: String) {
         textAlign = TextAlign.Center,
         maxLines = 1,
         fontWeight = FontWeight.Bold,
+        fontSize = fontSize,
     )
 }
 
 @Composable
-fun SingleLineTextLight(text: String) {
+fun SingleLineTextLight(text: String, fontSize: TextUnit = 14.sp) {
     Text(
         text = text,
         overflow = TextOverflow.Clip,
@@ -67,6 +70,7 @@ fun SingleLineTextLight(text: String) {
         textAlign = TextAlign.Center,
         maxLines = 1,
         fontWeight = FontWeight.Light,
+        fontSize = fontSize
     )
 }
 
@@ -139,5 +143,18 @@ fun EmptyCircularCover() {
         modifier = Modifier
             .height(80.dp)
             .clip(CircleShape)
+    )
+}
+
+@Composable
+fun EmptyCircularCoverBigPlayer() {
+    Image(
+        painter = painterResource(R.drawable.no_image),
+        contentDescription = "Album Cover nicht verfügbar",
+        modifier = Modifier
+            .padding(horizontal = 8.dp)
+            .fillMaxWidth()
+            .clip(CircleShape)
+            .border(2.dp, MaterialTheme.colors.primary, CircleShape)
     )
 }

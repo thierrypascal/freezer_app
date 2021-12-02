@@ -18,6 +18,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import fhnw.emoba.freezerapp.model.FreezerModel
 import fhnw.emoba.R
 import fhnw.emoba.freezerapp.data.classes.Track
@@ -59,7 +60,7 @@ private fun Body(model: FreezerModel) {
                 Column(content = {
                     BasicRow(
                         content = {
-                            Text("Zuletzt gespielt", fontWeight = FontWeight.Bold)
+                            SingleLineTextBold("Zuletzt gespielt", 18.sp)
                             IconButton(onClick = { currentScreen = Screen.LASTPLAYED }) {
                                 Icon(Icons.Filled.ArrowForwardIos, "Zuletzt gespielt")
                             }
@@ -71,7 +72,7 @@ private fun Body(model: FreezerModel) {
                     }
                     BasicRow(
                         content = {
-                            Text("Merkliste", fontWeight = FontWeight.Bold)
+                            SingleLineTextBold("Merkliste", 18.sp)
                             IconButton(onClick = { currentScreen = Screen.FAVORITETRACKS }) {
                                 Icon(Icons.Filled.ArrowForwardIos, "Merkliste")
                             }
@@ -83,7 +84,7 @@ private fun Body(model: FreezerModel) {
                     }
                     BasicRow(
                         content = {
-                            Text("Listensuche", fontWeight = FontWeight.Bold)
+                            SingleLineTextBold("Listensuche", 18.sp)
                             IconButton(onClick = { currentScreen = Screen.SEARCH }) {
                                 Icon(Icons.Filled.ArrowForwardIos, "Listensuche")
                             }
@@ -140,7 +141,6 @@ private fun TrackPanel(model: FreezerModel, track: Track, type: Int) {
     with(model) {
         Column(
             content = {
-                //TODO: while loading?
                 if (isLoadingImg){
                     CircularProgressIndicator()
                 }else{
@@ -186,7 +186,10 @@ private fun TrackPanel(model: FreezerModel, track: Track, type: Int) {
                 .width(140.dp)
                 .height(160.dp)
                 .padding(all = 4.dp)
-                .clickable(onClick = {/*TODO: open in player*/ })
+                .clickable(onClick = {
+                    getClickedTrackAsync(track.id, true)
+                    currentScreen = Screen.PLAYER
+                })
         )
     }
 }

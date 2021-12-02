@@ -23,7 +23,9 @@ fun FreezerUI(model: FreezerModel) {
                     Screen.LASTPLAYED -> {
                         LastPlayedScreen(model = model)
                     }
-                    Screen.PLAYER -> TODO()
+                    Screen.PLAYER -> {
+                        PlayerScreen(model = model)
+                    }
                     Screen.SEARCH -> {
                         SearchScreen(model = model)
                     }

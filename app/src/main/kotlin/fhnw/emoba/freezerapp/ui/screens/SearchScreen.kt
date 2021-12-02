@@ -22,6 +22,7 @@ import fhnw.emoba.freezerapp.data.classes.Artist
 import fhnw.emoba.freezerapp.data.classes.Radio
 import fhnw.emoba.freezerapp.data.classes.Track
 import fhnw.emoba.freezerapp.model.FreezerModel
+import fhnw.emoba.freezerapp.model.Screen
 import fhnw.emoba.freezerapp.model.Tabs
 
 @Composable
@@ -205,7 +206,8 @@ private fun ListTile(model: FreezerModel, element: Any, type: Int) {
                                 modifier = Modifier
                                     .width(getScreenWidth().dp - 150.dp)
                                     .clickable(onClick = {
-                                        /*TODO: play track*/
+                                        getClickedTrackAsync(track.id, true)
+                                        currentScreen = Screen.PLAYER
                                     })
                             )
                         })
@@ -228,7 +230,9 @@ private fun ListTile(model: FreezerModel, element: Any, type: Int) {
                                             //TODO: request and redirect to detailPage
                                         }
                                         1 -> {
-                                            favoriteTracks = favoriteTracks + track
+                                            if (!favoriteTracks.contains(track)){
+                                                favoriteTracks = favoriteTracks + track
+                                            }
                                         }
                                         2 -> {
                                             playlist = playlist + track

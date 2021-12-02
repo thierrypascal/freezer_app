@@ -16,13 +16,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import fhnw.emoba.freezerapp.data.classes.Track
 import fhnw.emoba.freezerapp.model.FreezerModel
+import fhnw.emoba.freezerapp.model.Screen
 
 @Composable
 fun LastPlayedScreen(model: FreezerModel) {
     val scaffoldState = rememberScaffoldState()
 
     with(model) {
-        getRadiosAsync()
         Scaffold(
             scaffoldState = scaffoldState,
             topBar = { TopBar(model = model) },
@@ -34,36 +34,38 @@ fun LastPlayedScreen(model: FreezerModel) {
 
 @Composable
 private fun TopBar(model: FreezerModel) {
-    with(model) {
-        StandardTopAppBar(model)
-    }
+    StandardTopAppBar(model)
 }
 
 @Composable
 private fun Body(model: FreezerModel) {
     val state = rememberLazyListState()
     with(model) {
-        Column(content = {
-            Text("Zuletzt gespielt", fontWeight = FontWeight.Bold)
-            Column(content = {
-                if (lastPlayed.isNotEmpty()) {
-                    LazyColumn(
-                        state = state,
-                    ) {
-                        items(lastPlayed) { ListTile(model, it) }
+        Column(
+            content = {
+                Text("Zuletzt gespielt", fontWeight = FontWeight.Bold)
+                Column(content = {
+                    if (lastPlayed.isNotEmpty()) {
+                        LazyColumn(
+                            state = state,
+                        ) {
+                            items(lastPlayed) { ListTile(model, it) }
+                        }
+                    } else {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = "Diese Liste ist noch leer",
+                            )
+                        }
                     }
-                } else {
-                    Box(
-                        modifier = Modifier.fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = "Diese Liste ist noch leer",
-                        )
-                    }
-                }
-            })
-        }, modifier = Modifier.padding(horizontal = 8.dp).fillMaxSize())
+                })
+            }, modifier = Modifier
+                .padding(horizontal = 8.dp)
+                .fillMaxSize()
+        )
     }
 }
 
@@ -89,7 +91,8 @@ private fun ListTile(model: FreezerModel, track: Track) {
                         modifier = Modifier
                             .width(getScreenWidth().dp - 150.dp)
                             .clickable(onClick = {
-                                /*TODO: play track*/
+                                getClickedTrackAsync(track.id, true)
+                                currentScreen = Screen.PLAYER
                             })
                     )
                 })
@@ -131,7 +134,5 @@ private fun ListTile(model: FreezerModel, track: Track) {
 
 @Composable
 private fun BottomBar(model: FreezerModel) {
-    with(model) {
-        StandardAppBottomBar(model)
-    }
+    StandardAppBottomBar(model)
 }

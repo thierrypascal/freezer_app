@@ -22,7 +22,6 @@ fun PlaylistScreen(model: FreezerModel) {
     val scaffoldState = rememberScaffoldState()
 
     with(model) {
-        getRadiosAsync()
         Scaffold(
             scaffoldState = scaffoldState,
             topBar = { TopBar(model = model) },
@@ -61,7 +60,9 @@ private fun Body(model: FreezerModel) {
                     }
                 }
             })
-        }, modifier = Modifier.padding(horizontal = 8.dp).fillMaxSize())
+        }, modifier = Modifier
+            .padding(horizontal = 8.dp)
+            .fillMaxSize())
     }
 }
 
@@ -129,7 +130,5 @@ private fun ListTile(model: FreezerModel, track: Track) {
 
 @Composable
 private fun BottomBar(model: FreezerModel) {
-    with(model) {
-        StandardAppBottomBar(model)
-    }
+    StandardAppBottomBar(model)
 }
