@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.PlaylistAdd
 import androidx.compose.material.icons.filled.QueueMusic
 import androidx.compose.material.icons.outlined.PlayArrow
 import androidx.compose.material.icons.outlined.SkipNext
@@ -124,8 +125,14 @@ private fun BottomBar(model: FreezerModel) {
                 IconButton(onClick = {
                     /*TODO: add current track to favoriteTracks*/
                     //Vorsicht: nicht nur .contains, vergleich mit id und merkliste track von foundTracks hinzufügen
+                    if (!favoriteTracks.map { t -> t.id }.contains(currentlyPlaying.id)){
+                        val ex = tracksFound.find { track -> track.id == currentlyPlaying.id}
+                        if (ex != null) {
+                            favoriteTracks = favoriteTracks + ex
+                        }
+                    }
                 }) {
-                    Icon(Icons.Filled.QueueMusic, "Merken")
+                    Icon(Icons.Filled.PlaylistAdd, "Merken")
                 }
                 //TODO: add miniplayer of currentlyPlaying
             },
