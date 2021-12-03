@@ -3,7 +3,6 @@ package fhnw.emoba.freezerapp.data.classes
 import org.json.JSONObject
 import java.lang.Exception
 import java.net.URL
-import java.util.*
 
 data class Track(
     val id: Int,
@@ -33,7 +32,7 @@ data class Track(
         link =              try {URL(jsonObject.getString("link"))}     catch (e: Exception) {URL("https://google.com/doesntexist")},
         share =             try {URL(jsonObject.getString("share"))}    catch (e: Exception) {URL("https://google.com/doesntexist")},
         track_position =    try {jsonObject.getInt("track_position")}   catch (e: Exception) {0},
-        release_date =      try {jsonObject.getString("release_date")}  catch (e: Exception) {"NaN"}, //TODO: to DateTime
+        release_date =      try {jsonObject.getString("release_date")}  catch (e: Exception) {"NaN"},
     )
 
     //special constructor for tracklist of album
@@ -50,7 +49,7 @@ data class Track(
         link =              try {URL(jsonObject.getString("link"))}     catch (e: Exception) {URL("https://google.com/doesntexist")},
         share =             try {URL(jsonObject.getString("share"))}    catch (e: Exception) {URL("https://google.com/doesntexist")},
         track_position =    try {jsonObject.getInt("track_position")}   catch (e: Exception) {0},
-        release_date =      try {jsonObject.getString("release_date")}  catch (e: Exception) {"NaN"}, //TODO: to DateTime
+        release_date =      try {jsonObject.getString("release_date")}  catch (e: Exception) {"NaN"},
     )
 
     constructor() : this(
@@ -61,12 +60,12 @@ data class Track(
         duration =          0,
         explicit_lyrics =   true,
         preview =           "https://google.com/doesntexist",
-        artist =          Artist(),
-        album =           Album(),
+        artist =            Artist(),
+        album =             Album(),
 
         share =             URL("https://google.com/doesntexist"),
         track_position =    0,
-        release_date =      "NaN", //TODO: to DateTime
+        release_date =      "NaN",
     )
 
     override fun toString(): String {

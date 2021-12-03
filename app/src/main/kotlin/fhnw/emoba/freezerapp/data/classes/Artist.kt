@@ -32,7 +32,7 @@ data class Artist (
         name =          "",
 
         link =          URL("https://google.com/doesntexist"),
-        picture =       "https://google.com/doesntexist",
+        picture =       "",
         nb_album =      0,
         nb_fan =        0,
 
@@ -41,6 +41,6 @@ data class Artist (
 
 
     override fun toString(): String {
-            return "Track(id='$id', title='$name', link='$link')"
+            return "Artist(id='$id', title='$name', link='$link')"
         }
 }

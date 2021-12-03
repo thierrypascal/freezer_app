@@ -31,7 +31,7 @@ data class Album(
         share =         try {URL(jsonObject.getString("share"))}    catch (e: Exception) {URL("https://google.com/doesntexist")},
         duration =      try {jsonObject.getInt("duration")}    catch (e: Exception) {0},
         fans =      try {jsonObject.getInt("fans")}    catch (e: Exception) {0},
-        release_date =  try {jsonObject.getString("release_date")}  catch (e: Exception) {"NaN"}, //TODO: to DateTime
+        release_date =  try {jsonObject.getString("release_date")}  catch (e: Exception) {"NaN"},
         artist =        try {Artist(jsonObject.getJSONObject("artist"))}    catch (e: Exception) {Artist()},
 
         tracklist =     jsonObject.getString("tracklist"),
@@ -48,13 +48,13 @@ data class Album(
         share =         URL("https://google.com/doesntexist"),
         duration =      0,
         fans =          0,
-        release_date =  "", //TODO: to DateTime
+        release_date =  "NaN",
         artist =        Artist(),
 
         tracklist =     "",
     )
 
     override fun toString(): String {
-        return "Track(id='$id', title='$title')"
+        return "Album(id='$id', title='$title')"
     }
 }

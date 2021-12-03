@@ -34,6 +34,6 @@ data class Radio(
     )
 
     override fun toString(): String {
-        return "Track(id='$id', title='$title')"
+        return "Radio(id='$id', title='$title')"
     }
 }
