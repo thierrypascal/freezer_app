@@ -115,6 +115,32 @@ fun MiniPlayer(model: FreezerModel) {
     with(model) {
         Row(
             content = {
+                Box(content = {
+                    if (isLoadingImg) {
+                        CircularProgressIndicator()
+                    } else {
+                        if (currentlyPlaying.id != 0) {
+                            if (currentlyPlayingCover != null) {
+                                Image(
+                                    bitmap = currentlyPlayingCover!!,
+                                    contentDescription = "Album Cover",
+                                    modifier = Modifier
+                                        .padding(horizontal = 8.dp)
+                                        .fillMaxHeight()
+                                        .clip(RoundedCornerShape(5.dp))
+                                        .clickable(onClick = {
+                                            getClickedTrackAsync(currentlyPlaying.id, true)
+                                            currentScreen = Screen.PLAYER
+                                        })
+                                )
+                            } else {
+                                EmptyCircularCoverMiniplayer()
+                            }
+                        }
+                    }
+                }, modifier = Modifier.fillMaxHeight())
+
+
                 IconButton(
                     onClick = { fromStart() },
                     modifier = Modifier.size(60.dp),
@@ -244,6 +270,18 @@ fun EmptyRoundedCoverBigDetail() {
             .fillMaxWidth()
             .clip(RoundedCornerShape(10.dp))
             .border(2.dp, MaterialTheme.colors.primary, RoundedCornerShape(10.dp))
+    )
+}
+
+@Composable
+fun EmptyCircularCoverMiniplayer() {
+    Image(
+        painter = painterResource(R.drawable.no_image),
+        contentDescription = "Album Cover nicht verfügbar",
+        modifier = Modifier
+            .padding(horizontal = 8.dp)
+            .fillMaxHeight()
+            .clip(RoundedCornerShape(5.dp))
     )
 }
 
