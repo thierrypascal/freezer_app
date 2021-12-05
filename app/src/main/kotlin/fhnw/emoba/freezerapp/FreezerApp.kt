@@ -14,9 +14,9 @@ object FreezerApp : EmobaApp {
         val service = FreezerService()
         model = FreezerModel(service)
 
-        //TODO: remove; Only for testing
+        //remove in production; Only for demo: loads search "Eminem" and adds five first tracks to favoriteTracks
         model.searchString = "Eminem"
-        model.getSearchAsync()
+        model.getSearchAsync(forDemo = true)
     }
 
     @Composable

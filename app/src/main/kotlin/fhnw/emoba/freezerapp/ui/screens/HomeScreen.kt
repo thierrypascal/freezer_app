@@ -107,7 +107,9 @@ private fun Body(model: FreezerModel) {
                         thickness = 6.dp
                     )
                     Spacer(Modifier.height(100.dp))
-                })
+                }, modifier = Modifier.clickable(onClick = {
+                    currentScreen = Screen.IMPRESSUM
+                }))
             },
             modifier = Modifier
                 .padding(8.0.dp)

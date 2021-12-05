@@ -41,8 +41,8 @@ fun SearchIcon(model: FreezerModel) {
 }
 
 @Composable
-fun BackIcon(model: FreezerModel) {
-    IconButton(onClick = { model.currentScreen = Screen.HOME }) {
+fun BackIcon(model: FreezerModel, toHome: Boolean = true) {
+    IconButton(onClick = { model.currentScreen = if (toHome) Screen.HOME else Screen.SEARCH }) {
         Icon(Icons.Filled.ArrowBackIos, "Zurück")
     }
 }
@@ -202,10 +202,10 @@ fun MiniPlayer(model: FreezerModel) {
 }
 
 @Composable
-fun StandardTopAppBar(model: FreezerModel) {
+fun StandardTopAppBar(model: FreezerModel, toHome: Boolean = true) {
     TopAppBar(
         title = { InofficialLogo(model) },
-        navigationIcon = { BackIcon(model) },
+        navigationIcon = { BackIcon(model, toHome) },
         actions = { SearchIcon(model) },
         backgroundColor = MaterialTheme.colors.background,
         contentColor = MaterialTheme.colors.secondary,

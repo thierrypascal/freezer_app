@@ -11,4 +11,5 @@ enum class Screen {
     ARTISTDETAIL,
     ALBUMDETAIL,
     RADIODETAIL,
+    IMPRESSUM,
 }

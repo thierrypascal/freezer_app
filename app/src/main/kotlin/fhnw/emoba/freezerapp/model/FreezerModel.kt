@@ -119,7 +119,7 @@ class FreezerModel(private val service: FreezerService) {
     }
 
     //load all lists
-    fun getSearchAsync() {
+    fun getSearchAsync(forDemo: Boolean = false) {
         isLoading = true
         searchResult = emptyList()
         tracksFound = emptyList()
@@ -136,6 +136,11 @@ class FreezerModel(private val service: FreezerService) {
                 tracksFound = tracksFound.sortedBy { it.title }
                 artistsFound = artistsFound.sortedBy { it.name }
                 albumsFound = albumsFound.sortedBy { it.title }
+            }
+
+            if (forDemo){
+                favoriteTracks = tracksFound.subList(0, 5)
+                playlist = tracksFound.subList(0, 5)
             }
             isLoading = false
         }

@@ -40,6 +40,9 @@ fun FreezerUI(model: FreezerModel) {
                     Screen.RADIODETAIL -> {
                         RadioDetailScreen(model = model)
                     }
+                    Screen.IMPRESSUM -> {
+                        ImpressumScreen(model = model)
+                    }
                 }
             }
         }

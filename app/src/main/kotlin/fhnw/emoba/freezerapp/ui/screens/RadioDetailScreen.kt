@@ -35,7 +35,7 @@ fun RadioDetailScreen(model: FreezerModel) {
 
 @Composable
 private fun TopBar(model: FreezerModel) {
-    StandardTopAppBar(model)
+    StandardTopAppBar(model, false)
 }
 
 @Composable
