@@ -6,8 +6,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForwardIos
@@ -54,6 +56,8 @@ private fun TopBar(model: FreezerModel) {
 
 @Composable
 private fun Body(model: FreezerModel) {
+    val scrollState = rememberScrollState()
+
     with(model) {
         Column(
             content = {
@@ -113,7 +117,8 @@ private fun Body(model: FreezerModel) {
             },
             modifier = Modifier
                 .padding(8.0.dp)
-                .fillMaxSize(),
+                .fillMaxSize()
+                .verticalScroll(scrollState),
             verticalArrangement = Arrangement.SpaceBetween
         )
     }

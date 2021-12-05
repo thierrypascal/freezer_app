@@ -3,7 +3,9 @@ package fhnw.emoba.freezerapp.ui.screens
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlaylistAdd
@@ -43,6 +45,8 @@ private fun TopBar(model: FreezerModel) {
 
 @Composable
 private fun Body(model: FreezerModel) {
+    val scrollState = rememberScrollState()
+
     with(model) {
         Column(
             content = {
@@ -129,7 +133,8 @@ private fun Body(model: FreezerModel) {
             modifier = Modifier
                 .padding(horizontal = 8.dp)
                 .padding(bottom = 60.dp)
-                .fillMaxSize(),
+                .fillMaxSize()
+                .verticalScroll(scrollState),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceBetween
         )
