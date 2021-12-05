@@ -66,6 +66,7 @@ class FreezerModel(private val service: FreezerService) {
         })
         setOnCompletionListener {
             playerIsReady = true
+            nextTrack()
         }
     }
 
